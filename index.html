@@ -3,12 +3,18 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>GLTF Viewer UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 누출원 탐지 시스템</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      font-family: 'Inter', sans-serif; 
+      background-color: #121212; 
+      color: #E0E0E0; 
+      position: relative; 
+      width: 100vw; 
+      height: 100vh; 
     }
 
     .container {
@@ -18,7 +24,7 @@
 
     .right-panel {
       flex-grow: 1;
-      background: #f0f0f0;
+      background: #1A1D2E;
       position: relative;
     }
 
@@ -28,63 +34,274 @@
       height: 100%;
     }
 
+    .ui-panel {
+      position: absolute; 
+      background: rgba(26, 29, 46, 0.88); 
+      backdrop-filter: blur(12px) saturate(190%);
+      -webkit-backdrop-filter: blur(12px) saturate(190%);
+      border: 1px solid rgba(0, 207, 232, 0.25); 
+      border-radius: 16px; 
+      box-shadow: 0 8px 32px rgba(0, 207, 232, 0.2); 
+      padding: 20px;
+      color: #E0E0E0;
+      z-index: 50; 
+    }
+
+    #topControls { 
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60; 
+      display: flex;
+      gap: 10px;
+    }
+
+    .toggle-button { 
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #00CFE8;
+      background: transparent;
+      border: 1px solid #00CFE8;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-button.active { 
+      background: #00CFE8;
+      color: #1A1D2E;
+      box-shadow: 0 0 15px rgba(0, 207, 232, 0.5);
+    }
+    
+    .toggle-button:not(.active):hover {
+      background: rgba(0, 207, 232, 0.1);
+    }
+
     #overlay-buttons {
       position: absolute;
       top: 20px;
       left: 20px;
-      z-index: 10000;
+      z-index: 60;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
     #overlay-buttons button {
-      padding: 8px 12px;
-      font-size: 14px;
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #00CFE8;
+      background: transparent;
+      border: 1px solid #00CFE8;
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    #overlay-buttons button:hover {
+      background: rgba(0, 207, 232, 0.1);
+      box-shadow: 0 0 15px rgba(0, 207, 232, 0.3);
     }
 
     #popup {
       position: fixed;
       display: none;
-
-      top: 10%;
-      left: 40%;
-      /*
-      top: 100px;
-      left: 200px;
-      */
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(26, 29, 46, 0.88);
+      backdrop-filter: blur(12px) saturate(190%);
+      -webkit-backdrop-filter: blur(12px) saturate(190%);
+      border: 1px solid rgba(0, 207, 232, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 207, 232, 0.2);
       font-size: 14px;
-      z-index: 9999;
-      width: 50vw;       /* 고정 너비 */
-      min-width: 250px;
-      overflow: auto;      /* 내용이 넘치면 스크롤 */
-      max-height: 80vh;     /* 화면 높이의 최대 80% */
+      z-index: 100;
+      width: 50vw;
+      min-width: 300px;
+      overflow: auto;
+      max-height: 80vh;
     }
 
     #popup-header {
       cursor: move;
-      background: #f0f0f0;
-      padding: 5px 10px;
-      border-bottom: 1px solid #ccc;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(0, 207, 232, 0.3);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 5px 5px 0 0;
+      border-radius: 16px 16px 0 0;
+      color: #00CFE8;
+      font-weight: 600;
     }
 
     #popup-content {
       width: 90%;
-      padding: 10px;
+      padding: 20px;
+      margin: 0 auto;
+    }
+
+    #closeButton {
+      background: transparent;
+      color: #00CFE8;
+      border: 1px solid #00CFE8;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
+      line-height: 26px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #closeButton:hover {
+      background: rgba(0, 207, 232, 0.2);
+      color: #FFFFFF;
+      box-shadow: 0 0 10px rgba(0, 207, 232, 0.5);
+    }
+
+    .info-panel {
+      top: 80px; 
+      left: 20px; 
+      max-width: 300px; 
+      font-size: 0.85rem;
+    }
+
+    .info-panel h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #00CFE8;
+      border-bottom: 1px solid rgba(0, 207, 232, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .info-panel h3 {
+      font-size: 1.0rem;
+      font-weight: 600;
+      color: #00CFE8;
+      margin-bottom: 8px;
+    }
+
+    .sensor-value {
+      font-weight: 500;
+      color: #FFFFFF;
+    }
+
+    #graphModal { 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      width: 90%; 
+      max-width: 700px; 
+      height: auto; 
+      max-height: 550px; 
+      z-index: 110;
+      display: none; 
+      flex-direction: column; 
+    }
+
+    #graphModal h3 { 
+      font-size: 1.4rem; 
+      font-weight: 600; 
+      color: #00CFE8; 
+      margin-top: 0; 
+      margin-bottom: 20px; 
+      text-align: center; 
+    }
+
+    #graphCanvasContainer { 
+      width: 100%; 
+      flex-grow: 1; 
+      min-height: 300px; 
+    }
+
+    #closeGraphButton { 
+      position: absolute; 
+      top: 15px; 
+      right: 15px; 
+      background: transparent; 
+      color: #00CFE8; 
+      border: 1px solid #00CFE8; 
+      border-radius: 50%; 
+      width: 32px; 
+      height: 32px; 
+      font-size: 18px; 
+      line-height: 30px; 
+      text-align: center; 
+      cursor: pointer; 
+      transition: all 0.3s; 
+    }
+
+    #closeGraphButton:hover { 
+      background: rgba(0, 207, 232, 0.2); 
+      color: #FFFFFF; 
+      box-shadow: 0 0 10px rgba(0, 207, 232, 0.5); 
+    }
+
+    /* Status display styling */
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status-normal {
+      background-color: #4ade80; /* green */
+    }
+
+    .status-warning {
+      background-color: #facc15; /* yellow */
+    }
+
+    .status-danger {
+      background-color: #f87171; /* red */
+    }
+
+    /* Sensor Labels */
+    .sensor-label {
+      color: #E0E0E0;
+      background-color: rgba(26, 29, 46, 0.7);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      position: absolute;
+      transform: translateX(-50%) translateY(-160%);
+      white-space: nowrap;
+      pointer-events: none;
+      border: 1px solid rgba(0, 207, 232, 0.3);
+      z-index: 1;
+    }
+
+    /* Control buttons styling */
+    .control-button {
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #E0E0E0;
+      background: transparent;
+      border: 1px solid rgba(0, 207, 232, 0.5);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 100px;
+      justify-content: center;
+    }
+
+    .control-button:hover {
+      background: rgba(0, 207, 232, 0.2);
+      border-color: rgba(0, 207, 232, 0.8);
+      box-shadow: 0 0 15px rgba(0, 207, 232, 0.3);
     }
   </style>
 </head>
@@ -95,6 +312,10 @@
     <div class="right-panel" id="viewer"></div>
   </div>
 
+  <div id="topControls">
+    <button id="dataLogButton" class="toggle-button">데이터 로그</button>
+    <button id="aiDetectionButton" class="toggle-button">AI 누출원 탐지</button>
+  </div>
   <div id="overlay-buttons">
     <button onclick="LearningStart()">AI 학습</button>
     <button onclick="DemoStart()">데모 시작</button>
@@ -102,24 +323,318 @@
     <button onclick="Dispersion()">암모니아 확산 양상</button>
   </div>
 
-  <div id="popup">
+  <div id="popup" class="ui-panel">
     <div id="popup-header">
-      <span><strong>정보</strong></span>
-      <button onclick="popup.style.display='none'; popupLocked=true;">✖</button>
+      <span>시뮬레이션 정보</span>
+      <button id="closeButton" onclick="popup.style.display='none'; popupLocked=false;">✖</button>
     </div>
     <div id="popup-content"></div>
+  </div>
+
+  <div id="info" class="ui-panel info-panel" style="top: 80px; left: 140px; max-width: 300px;">
+    <h2>시뮬레이션 정보</h2>
+    <p>현재 상태: <span id="statusDisplay" class="sensor-value">대기중</span></p>
+    <p>누출 지점: <span id="leakPointDisplay" class="sensor-value">미설정</span></p>
+    <h3>센서 상태 (ppm)</h3>
+    <ul id="sensorData" style="list-style: none; padding: 0;"></ul>
+    <button id="showAllSensorsGraph" class="control-button" style="width:100%; margin-top: 15px;">
+      <span>전체 센서 그래프 보기</span>
+    </button>
+  </div>
+
+  <div id="aiInfoPanel" class="ui-panel info-panel" style="right: 20px; left: auto; display: none;">
+    <h2>AI 누출원 탐지</h2>
+    <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 207, 232, 0.2);">
+      <h3>모델 예측 정확도</h3>
+      <p><span id="aiAccuracy" style="font-size: 1.4rem; color: #4ade80; font-weight: bold;">---</span> %</p>
+    </div>
+    <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 207, 232, 0.2);">
+      <h3>예측 누출원 위치</h3>
+      <p>좌표 (X, Y, Z): <span id="aiPredictedSource" class="sensor-value">---</span></p>
+    </div>
+    <div style="margin-bottom: 15px;">
+      <h3>센서 값 비교</h3>
+      <div style="max-height: 200px; overflow-y: auto;">
+        <table id="aiSensorComparisonTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">센서</th>
+              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">실제값</th>
+              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">예측값</th>
+            </tr>
+          </thead>
+          <tbody id="aiSensorComparison">
+            <!-- 센서 데이터가 여기에 추가됩니다 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="dataLogContent" class="ui-panel" style="top: 80px; left: 20px; right: 20px; bottom: 20px; display: none; overflow-y: auto;">
+    <h2 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; color: #00CFE8; border-bottom: 1px solid rgba(0, 207, 232, 0.3); padding-bottom: 10px;">센서 데이터 로그</h2>
+    <div style="max-height: calc(100% - 50px); overflow-y: auto;">
+      <table id="sensorLogTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 15px;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">시간 (초)</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #1</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #2</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #3</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #4</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #5</th>
+            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #6</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody">
+          <!-- Log data will be added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="graphModal" class="ui-panel">
+    <button id="closeGraphButton" onclick="closeGraphModal()">✖</button>
+    <h3 id="graphTitle">센서 시계열 데이터</h3>
+    <div id="graphCanvasContainer">
+      <canvas id="sensorChart"></canvas>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 
   <script>
     let scene, camera, renderer, loader, controls, currentModel;
     const popup = document.getElementById('popup');
     const popupHeader = document.getElementById('popup-header');
     let popupLocked = true;  // 팝업 잠금 여부 (AI 학습 시 true)
+
+    // Toggle buttons for data log and AI detection
+    const dataLogButton = document.getElementById('dataLogButton');
+    const aiDetectionButton = document.getElementById('aiDetectionButton');
+    const dataLogContent = document.getElementById('dataLogContent');
+    const aiInfoPanel = document.getElementById('aiInfoPanel');
+    const closeGraphButton = document.getElementById('closeGraphButton');
+    const showAllSensorsGraphButton = document.getElementById('showAllSensorsGraph');
+
+    // Add event listeners for toggle buttons
+    dataLogButton.addEventListener('click', () => {
+      const isVisible = dataLogContent.style.display === 'block';
+      dataLogContent.style.display = isVisible ? 'none' : 'block';
+      dataLogButton.classList.toggle('active', !isVisible);
+      
+      // Hide AI panel when showing data log
+      if (!isVisible) {
+        aiInfoPanel.style.display = 'none';
+        aiDetectionButton.classList.remove('active');
+      }
+    });
+
+    aiDetectionButton.addEventListener('click', () => {
+      const isVisible = aiInfoPanel.style.display === 'block';
+      aiInfoPanel.style.display = isVisible ? 'none' : 'block';
+      aiDetectionButton.classList.toggle('active', !isVisible);
+      
+      // Hide data log when showing AI panel
+      if (!isVisible) {
+        dataLogContent.style.display = 'none';
+        dataLogButton.classList.remove('active');
+      }
+      
+      // Update AI panel data when showing
+      if (!isVisible) {
+        updateAIPanel();
+      }
+    });
+
+    // Function to close graph modal
+    function closeGraphModal() {
+      document.getElementById('graphModal').style.display = 'none';
+    }
+
+    // Function to update the AI panel with simulation data
+    function updateAIPanel() {
+      // Update accuracy with a random value between 97-99%
+      const accuracy = (97 + Math.random() * 2).toFixed(2);
+      document.getElementById('aiAccuracy').textContent = accuracy;
+      
+      // Set a predicted position with slight randomization
+      const predictedPos = {
+        x: (3.5 + (Math.random() * 0.4 - 0.2)).toFixed(2),
+        y: (-1 + (Math.random() * 0.4 - 0.2)).toFixed(2),
+        z: (2 + (Math.random() * 0.4 - 0.2)).toFixed(2)
+      };
+      document.getElementById('aiPredictedSource').textContent = `(${predictedPos.x}, ${predictedPos.y}, ${predictedPos.z})`;
+      
+      // Update the comparison table
+      const aiSensorComparison = document.getElementById('aiSensorComparison');
+      aiSensorComparison.innerHTML = '';
+      
+      // Generate some sample sensor data
+      for (let i = 1; i <= 6; i++) {
+        const actualValue = (Math.random() * 10).toFixed(2);
+        const predictedValue = (parseFloat(actualValue) + (Math.random() - 0.5)).toFixed(2);
+        
+        const row = document.createElement('tr');
+        const sensorCell = document.createElement('td');
+        sensorCell.textContent = `센서 #${i}`;
+        sensorCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
+        sensorCell.style.padding = '8px';
+        
+        const actualCell = document.createElement('td');
+        actualCell.textContent = actualValue;
+        actualCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
+        actualCell.style.padding = '8px';
+        
+        const predictedCell = document.createElement('td');
+        predictedCell.textContent = predictedValue;
+        predictedCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
+        predictedCell.style.padding = '8px';
+        predictedCell.style.color = '#facc15'; // Yellow for predicted values
+        
+        row.appendChild(sensorCell);
+        row.appendChild(actualCell);
+        row.appendChild(predictedCell);
+        aiSensorComparison.appendChild(row);
+      }
+    }
+
+    // Function to update sensor status panel
+    function updateSensorDataPanel() {
+      const sensorData = document.getElementById('sensorData');
+      sensorData.innerHTML = '';
+      
+      // Generate random sensor values
+      for (let i = 1; i <= 6; i++) {
+        const value = (Math.random() * 10).toFixed(2);
+        const statusClass = parseFloat(value) > 7 ? 'status-danger' : 
+                          parseFloat(value) > 3 ? 'status-warning' : 'status-normal';
+        
+        const listItem = document.createElement('li');
+        listItem.style.marginBottom = '8px';
+        listItem.style.display = 'flex';
+        listItem.style.alignItems = 'center';
+        
+        const statusIndicator = document.createElement('span');
+        statusIndicator.className = `status-indicator ${statusClass}`;
+        
+        const label = document.createElement('span');
+        label.innerHTML = `센서 #${i}: <span class="sensor-value">${value}</span> ppm`;
+        
+        listItem.appendChild(statusIndicator);
+        listItem.appendChild(label);
+        sensorData.appendChild(listItem);
+      }
+      
+      // Update leak point display
+      document.getElementById('leakPointDisplay').textContent = '(3.5, -1.0, 2.0)';
+      
+      // Update status display
+      document.getElementById('statusDisplay').textContent = '모니터링 중';
+    }
+
+    // All sensors graph functionality
+    showAllSensorsGraphButton.addEventListener('click', () => {
+      const graphModal = document.getElementById('graphModal');
+      const graphTitle = document.getElementById('graphTitle');
+      graphTitle.textContent = '전체 센서 데이터 시계열 그래프';
+      
+      // Create a chart
+      const ctx = document.getElementById('sensorChart').getContext('2d');
+      
+      // Generate random data for each sensor
+      const datasets = [];
+      const labels = [];
+      
+      // Create time labels
+      for (let i = 0; i <= 30; i++) {
+        labels.push(i);
+      }
+      
+      // Create datasets for each sensor
+      for (let i = 1; i <= 6; i++) {
+        const color = `hsl(${(i * 60) % 360}, 70%, 50%)`;
+        const data = [];
+        
+        // Generate random values with some continuity
+        let lastVal = Math.random() * 5;
+        for (let j = 0; j <= 30; j++) {
+          lastVal = Math.max(0, lastVal + (Math.random() - 0.5) * 2);
+          data.push(lastVal);
+        }
+        
+        datasets.push({
+          label: `센서 #${i}`,
+          data: data,
+          borderColor: color,
+          backgroundColor: color + '33', // Add transparency
+          tension: 0.3,
+          fill: false
+        });
+      }
+      
+      // Destroy previous chart instance if it exists
+      if (window.sensorChart) {
+        window.sensorChart.destroy();
+      }
+      
+      // Create new chart
+      window.sensorChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: '시간 (초)',
+                color: '#E0E0E0'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#E0E0E0'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: '농도 (ppm)',
+                color: '#E0E0E0'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: '#E0E0E0'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: '#E0E0E0'
+              }
+            }
+          }
+        }
+      });
+      
+      graphModal.style.display = 'flex';
+    });
+
+    // Initialize the info panel with sample data
+    updateSensorDataPanel();
 
     init();
     loadModel('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/model_GE-v1.glb');
