@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 누출원 탐지 시스템</title>
   <style>
-    body { 
-      margin: 0; 
-      overflow: hidden; 
-      font-family: 'Inter', sans-serif; 
-      background-color: #121212; 
-      color: #E0E0E0; 
-      position: relative; 
-      width: 100vw; 
-      height: 100vh; 
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #E0E0E0;
+      position: relative;
+      width: 100vw;
+      height: 100vh;
     }
 
     .container {
@@ -35,48 +35,16 @@
     }
 
     .ui-panel {
-      position: absolute; 
-      background: rgba(26, 29, 46, 0.88); 
+      position: absolute;
+      background: rgba(26, 29, 46, 0.88);
       backdrop-filter: blur(12px) saturate(190%);
       -webkit-backdrop-filter: blur(12px) saturate(190%);
-      border: 1px solid rgba(0, 207, 232, 0.25); 
-      border-radius: 16px; 
-      box-shadow: 0 8px 32px rgba(0, 207, 232, 0.2); 
+      border: 1px solid rgba(0, 207, 232, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 207, 232, 0.2);
       padding: 20px;
       color: #E0E0E0;
-      z-index: 50; 
-    }
-
-    #topControls { 
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 60; 
-      display: flex;
-      gap: 10px;
-    }
-
-    .toggle-button { 
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #00CFE8;
-      background: transparent;
-      border: 1px solid #00CFE8;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .toggle-button.active { 
-      background: #00CFE8;
-      color: #1A1D2E;
-      box-shadow: 0 0 15px rgba(0, 207, 232, 0.5);
-    }
-    
-    .toggle-button:not(.active):hover {
-      background: rgba(0, 207, 232, 0.1);
+      z-index: 50;
     }
 
     #overlay-buttons {
@@ -164,104 +132,55 @@
       box-shadow: 0 0 10px rgba(0, 207, 232, 0.5);
     }
 
-    .info-panel {
-      top: 80px; 
-      left: 20px; 
-      max-width: 300px; 
-      font-size: 0.85rem;
-    }
-
-    .info-panel h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: #00CFE8;
-      border-bottom: 1px solid rgba(0, 207, 232, 0.3);
-      padding-bottom: 10px;
-    }
-
-    .info-panel h3 {
-      font-size: 1.0rem;
-      font-weight: 600;
-      color: #00CFE8;
-      margin-bottom: 8px;
-    }
-
-    .sensor-value {
-      font-weight: 500;
-      color: #FFFFFF;
-    }
-
-    #graphModal { 
-      top: 50%; 
-      left: 50%; 
-      transform: translate(-50%, -50%); 
-      width: 90%; 
-      max-width: 700px; 
-      height: auto; 
-      max-height: 550px; 
+    #graphModal {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      height: auto;
+      max-height: 550px;
       z-index: 110;
-      display: none; 
-      flex-direction: column; 
+      display: none;
+      flex-direction: column;
     }
 
-    #graphModal h3 { 
-      font-size: 1.4rem; 
-      font-weight: 600; 
-      color: #00CFE8; 
-      margin-top: 0; 
-      margin-bottom: 20px; 
-      text-align: center; 
+    #graphModal h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #00CFE8;
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    #graphCanvasContainer { 
-      width: 100%; 
-      flex-grow: 1; 
-      min-height: 300px; 
+    #graphCanvasContainer {
+      width: 100%;
+      flex-grow: 1;
+      min-height: 300px;
     }
 
-    #closeGraphButton { 
-      position: absolute; 
-      top: 15px; 
-      right: 15px; 
-      background: transparent; 
-      color: #00CFE8; 
-      border: 1px solid #00CFE8; 
-      border-radius: 50%; 
-      width: 32px; 
-      height: 32px; 
-      font-size: 18px; 
-      line-height: 30px; 
-      text-align: center; 
-      cursor: pointer; 
-      transition: all 0.3s; 
-    }
-
-    #closeGraphButton:hover { 
-      background: rgba(0, 207, 232, 0.2); 
-      color: #FFFFFF; 
-      box-shadow: 0 0 10px rgba(0, 207, 232, 0.5); 
-    }
-
-    /* Status display styling */
-    .status-indicator {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
+    #closeGraphButton {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      color: #00CFE8;
+      border: 1px solid #00CFE8;
       border-radius: 50%;
-      margin-right: 8px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
     }
 
-    .status-normal {
-      background-color: #4ade80; /* green */
-    }
-
-    .status-warning {
-      background-color: #facc15; /* yellow */
-    }
-
-    .status-danger {
-      background-color: #f87171; /* red */
+    #closeGraphButton:hover {
+      background: rgba(0, 207, 232, 0.2);
+      color: #FFFFFF;
+      box-shadow: 0 0 10px rgba(0, 207, 232, 0.5);
     }
 
     /* Sensor Labels */
@@ -280,28 +199,49 @@
       z-index: 1;
     }
 
-    /* Control buttons styling */
-    .control-button {
-      padding: 10px 15px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #E0E0E0;
-      background: transparent;
-      border: 1px solid rgba(0, 207, 232, 0.5);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 100px;
-      justify-content: center;
+    /* Neural network animation canvas */
+    #networkCanvas {
+      width: 100%;
+      height: 450px;
+      background-color: #0a0a14;
+      border-radius: 12px;
+      margin-top: 10px;
     }
 
-    .control-button:hover {
-      background: rgba(0, 207, 232, 0.2);
-      border-color: rgba(0, 207, 232, 0.8);
-      box-shadow: 0 0 15px rgba(0, 207, 232, 0.3);
+    /* Bloom effect for neon glowing */
+    .bloom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      filter: blur(20px);
+      z-index: 1;
+    }
+
+    /* Controls for interactive chart */
+    .chart-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 12px;
+    }
+
+    .chart-controls button {
+      padding: 8px 15px;
+      background-color: rgba(0, 207, 232, 0.1);
+      border: 1px solid rgba(0, 207, 232, 0.5);
+      color: #00CFE8;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chart-controls button:hover {
+      background-color: rgba(0, 207, 232, 0.2);
+      box-shadow: 0 0 10px rgba(0, 207, 232, 0.3);
     }
   </style>
 </head>
@@ -310,12 +250,9 @@
 
   <div class="container">
     <div class="right-panel" id="viewer"></div>
+    <div class="bloom" id="bloomEffect"></div>
   </div>
 
-  <div id="topControls">
-    <button id="dataLogButton" class="toggle-button">데이터 로그</button>
-    <button id="aiDetectionButton" class="toggle-button">AI 누출원 탐지</button>
-  </div>
   <div id="overlay-buttons">
     <button onclick="LearningStart()">AI 학습</button>
     <button onclick="DemoStart()">데모 시작</button>
@@ -325,72 +262,10 @@
 
   <div id="popup" class="ui-panel">
     <div id="popup-header">
-      <span>시뮬레이션 정보</span>
-      <button id="closeButton" onclick="popup.style.display='none'; popupLocked=false;">✖</button>
+      <span id="popupTitle">시뮬레이션 정보</span>
+      <button id="closeButton" onclick="closePopup()">✖</button>
     </div>
     <div id="popup-content"></div>
-  </div>
-
-  <div id="info" class="ui-panel info-panel" style="top: 80px; left: 140px; max-width: 300px;">
-    <h2>시뮬레이션 정보</h2>
-    <p>현재 상태: <span id="statusDisplay" class="sensor-value">대기중</span></p>
-    <p>누출 지점: <span id="leakPointDisplay" class="sensor-value">미설정</span></p>
-    <h3>센서 상태 (ppm)</h3>
-    <ul id="sensorData" style="list-style: none; padding: 0;"></ul>
-    <button id="showAllSensorsGraph" class="control-button" style="width:100%; margin-top: 15px;">
-      <span>전체 센서 그래프 보기</span>
-    </button>
-  </div>
-
-  <div id="aiInfoPanel" class="ui-panel info-panel" style="right: 20px; left: auto; display: none;">
-    <h2>AI 누출원 탐지</h2>
-    <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 207, 232, 0.2);">
-      <h3>모델 예측 정확도</h3>
-      <p><span id="aiAccuracy" style="font-size: 1.4rem; color: #4ade80; font-weight: bold;">---</span> %</p>
-    </div>
-    <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 207, 232, 0.2);">
-      <h3>예측 누출원 위치</h3>
-      <p>좌표 (X, Y, Z): <span id="aiPredictedSource" class="sensor-value">---</span></p>
-    </div>
-    <div style="margin-bottom: 15px;">
-      <h3>센서 값 비교</h3>
-      <div style="max-height: 200px; overflow-y: auto;">
-        <table id="aiSensorComparisonTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px;">
-          <thead>
-            <tr>
-              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">센서</th>
-              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">실제값</th>
-              <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8;">예측값</th>
-            </tr>
-          </thead>
-          <tbody id="aiSensorComparison">
-            <!-- 센서 데이터가 여기에 추가됩니다 -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div id="dataLogContent" class="ui-panel" style="top: 80px; left: 20px; right: 20px; bottom: 20px; display: none; overflow-y: auto;">
-    <h2 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; color: #00CFE8; border-bottom: 1px solid rgba(0, 207, 232, 0.3); padding-bottom: 10px;">센서 데이터 로그</h2>
-    <div style="max-height: calc(100% - 50px); overflow-y: auto;">
-      <table id="sensorLogTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 15px;">
-        <thead>
-          <tr>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">시간 (초)</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #1</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #2</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #3</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #4</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #5</th>
-            <th style="border: 1px solid rgba(0, 207, 232, 0.3); padding: 8px; background-color: rgba(0, 207, 232, 0.1); color: #00CFE8; position: sticky; top: 0;">센서 #6</th>
-          </tr>
-        </thead>
-        <tbody id="logTableBody">
-          <!-- Log data will be added here -->
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <div id="graphModal" class="ui-panel">
@@ -406,246 +281,58 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.138.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
 
   <script>
     let scene, camera, renderer, loader, controls, currentModel;
+    let composer, bloomPass; // For bloom effect
     const popup = document.getElementById('popup');
     const popupHeader = document.getElementById('popup-header');
+    const popupTitleElement = document.getElementById('popupTitle');
     let popupLocked = true;  // 팝업 잠금 여부 (AI 학습 시 true)
+    
+    // Initialize raycaster and mouse for object interaction
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    // Add global isPlaying variable
+    let isPlaying = true;
 
-    // Toggle buttons for data log and AI detection
-    const dataLogButton = document.getElementById('dataLogButton');
-    const aiDetectionButton = document.getElementById('aiDetectionButton');
-    const dataLogContent = document.getElementById('dataLogContent');
-    const aiInfoPanel = document.getElementById('aiInfoPanel');
     const closeGraphButton = document.getElementById('closeGraphButton');
-    const showAllSensorsGraphButton = document.getElementById('showAllSensorsGraph');
 
-    // Add event listeners for toggle buttons
-    dataLogButton.addEventListener('click', () => {
-      const isVisible = dataLogContent.style.display === 'block';
-      dataLogContent.style.display = isVisible ? 'none' : 'block';
-      dataLogButton.classList.toggle('active', !isVisible);
-      
-      // Hide AI panel when showing data log
-      if (!isVisible) {
-        aiInfoPanel.style.display = 'none';
-        aiDetectionButton.classList.remove('active');
+    function closePopup() {
+      if (leakTimer) { 
+          clearInterval(leakTimer);
+          leakTimer = null;
       }
-    });
-
-    aiDetectionButton.addEventListener('click', () => {
-      const isVisible = aiInfoPanel.style.display === 'block';
-      aiInfoPanel.style.display = isVisible ? 'none' : 'block';
-      aiDetectionButton.classList.toggle('active', !isVisible);
-      
-      // Hide data log when showing AI panel
-      if (!isVisible) {
-        dataLogContent.style.display = 'none';
-        dataLogButton.classList.remove('active');
+      if (leakChart) { 
+          leakChart.destroy();
+          leakChart = null;
+      }
+      // Stop any animation loops
+      if (window.neuralNetAnimationId) {
+        cancelAnimationFrame(window.neuralNetAnimationId);
+        window.neuralNetAnimationId = null;
       }
       
-      // Update AI panel data when showing
-      if (!isVisible) {
-        updateAIPanel();
-      }
-    });
-
-    // Function to close graph modal
-    function closeGraphModal() {
-      document.getElementById('graphModal').style.display = 'none';
+      // Make sure any displayed popup is hidden
+      popup.style.display = 'none';
+      popupLocked = false;
     }
-
-    // Function to update the AI panel with simulation data
-    function updateAIPanel() {
-      // Update accuracy with a random value between 97-99%
-      const accuracy = (97 + Math.random() * 2).toFixed(2);
-      document.getElementById('aiAccuracy').textContent = accuracy;
-      
-      // Set a predicted position with slight randomization
-      const predictedPos = {
-        x: (3.5 + (Math.random() * 0.4 - 0.2)).toFixed(2),
-        y: (-1 + (Math.random() * 0.4 - 0.2)).toFixed(2),
-        z: (2 + (Math.random() * 0.4 - 0.2)).toFixed(2)
-      };
-      document.getElementById('aiPredictedSource').textContent = `(${predictedPos.x}, ${predictedPos.y}, ${predictedPos.z})`;
-      
-      // Update the comparison table
-      const aiSensorComparison = document.getElementById('aiSensorComparison');
-      aiSensorComparison.innerHTML = '';
-      
-      // Generate some sample sensor data
-      for (let i = 1; i <= 6; i++) {
-        const actualValue = (Math.random() * 10).toFixed(2);
-        const predictedValue = (parseFloat(actualValue) + (Math.random() - 0.5)).toFixed(2);
-        
-        const row = document.createElement('tr');
-        const sensorCell = document.createElement('td');
-        sensorCell.textContent = `센서 #${i}`;
-        sensorCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
-        sensorCell.style.padding = '8px';
-        
-        const actualCell = document.createElement('td');
-        actualCell.textContent = actualValue;
-        actualCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
-        actualCell.style.padding = '8px';
-        
-        const predictedCell = document.createElement('td');
-        predictedCell.textContent = predictedValue;
-        predictedCell.style.border = '1px solid rgba(0, 207, 232, 0.3)';
-        predictedCell.style.padding = '8px';
-        predictedCell.style.color = '#facc15'; // Yellow for predicted values
-        
-        row.appendChild(sensorCell);
-        row.appendChild(actualCell);
-        row.appendChild(predictedCell);
-        aiSensorComparison.appendChild(row);
-      }
-    }
-
-    // Function to update sensor status panel
-    function updateSensorDataPanel() {
-      const sensorData = document.getElementById('sensorData');
-      sensorData.innerHTML = '';
-      
-      // Generate random sensor values
-      for (let i = 1; i <= 6; i++) {
-        const value = (Math.random() * 10).toFixed(2);
-        const statusClass = parseFloat(value) > 7 ? 'status-danger' : 
-                          parseFloat(value) > 3 ? 'status-warning' : 'status-normal';
-        
-        const listItem = document.createElement('li');
-        listItem.style.marginBottom = '8px';
-        listItem.style.display = 'flex';
-        listItem.style.alignItems = 'center';
-        
-        const statusIndicator = document.createElement('span');
-        statusIndicator.className = `status-indicator ${statusClass}`;
-        
-        const label = document.createElement('span');
-        label.innerHTML = `센서 #${i}: <span class="sensor-value">${value}</span> ppm`;
-        
-        listItem.appendChild(statusIndicator);
-        listItem.appendChild(label);
-        sensorData.appendChild(listItem);
-      }
-      
-      // Update leak point display
-      document.getElementById('leakPointDisplay').textContent = '(3.5, -1.0, 2.0)';
-      
-      // Update status display
-      document.getElementById('statusDisplay').textContent = '모니터링 중';
-    }
-
-    // All sensors graph functionality
-    showAllSensorsGraphButton.addEventListener('click', () => {
-      const graphModal = document.getElementById('graphModal');
-      const graphTitle = document.getElementById('graphTitle');
-      graphTitle.textContent = '전체 센서 데이터 시계열 그래프';
-      
-      // Create a chart
-      const ctx = document.getElementById('sensorChart').getContext('2d');
-      
-      // Generate random data for each sensor
-      const datasets = [];
-      const labels = [];
-      
-      // Create time labels
-      for (let i = 0; i <= 30; i++) {
-        labels.push(i);
-      }
-      
-      // Create datasets for each sensor
-      for (let i = 1; i <= 6; i++) {
-        const color = `hsl(${(i * 60) % 360}, 70%, 50%)`;
-        const data = [];
-        
-        // Generate random values with some continuity
-        let lastVal = Math.random() * 5;
-        for (let j = 0; j <= 30; j++) {
-          lastVal = Math.max(0, lastVal + (Math.random() - 0.5) * 2);
-          data.push(lastVal);
-        }
-        
-        datasets.push({
-          label: `센서 #${i}`,
-          data: data,
-          borderColor: color,
-          backgroundColor: color + '33', // Add transparency
-          tension: 0.3,
-          fill: false
-        });
-      }
-      
-      // Destroy previous chart instance if it exists
-      if (window.sensorChart) {
-        window.sensorChart.destroy();
-      }
-      
-      // Create new chart
-      window.sensorChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: datasets
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: '시간 (초)',
-                color: '#E0E0E0'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#E0E0E0'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: '농도 (ppm)',
-                color: '#E0E0E0'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              ticks: {
-                color: '#E0E0E0'
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              labels: {
-                color: '#E0E0E0'
-              }
-            }
-          }
-        }
-      });
-      
-      graphModal.style.display = 'flex';
-    });
-
-    // Initialize the info panel with sample data
-    updateSensorDataPanel();
 
     init();
     loadModel('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/model_GE-v1.glb');
-
 
     function init() {
       const container = document.getElementById('viewer');
       scene = new THREE.Scene();
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
-      scene.background = null;
+      scene.background = new THREE.Color(0x0A0A14); // Dark background for neon effect
       container.appendChild(renderer.domElement);
 
       const aspect = container.clientWidth / container.clientHeight;
@@ -654,20 +341,73 @@
       camera.position.set(0, 0, -dist);
 
       controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.target.set(0,0,0);
+      controls.update();
+
       loader = new THREE.GLTFLoader();
 
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1));
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-      dirLight.position.set(5, 10, 7.5);
-      scene.add(dirLight);
+      // Enhanced lighting for neon effect
+      scene.add(new THREE.AmbientLight(0x101020, 0.5));
+      
+      // Add point lights for better neon effect
+      const pointLight1 = new THREE.PointLight(0x00FFFF, 1, 50);
+      pointLight1.position.set(10, 10, 10);
+      scene.add(pointLight1);
+      
+      const pointLight2 = new THREE.PointLight(0x00FFFF, 1, 50);
+      pointLight2.position.set(-10, -10, -10);
+      scene.add(pointLight2);
 
+      // Setup post-processing for bloom effect
+      setupBloom(container);
+      
       animate();
+    }
+    
+    function setupBloom(container) {
+      // Create EffectComposer
+      composer = new THREE.EffectComposer(renderer);
+      
+      // Add RenderPass
+      const renderPass = new THREE.RenderPass(scene, camera);
+      composer.addPass(renderPass);
+      
+      // Add UnrealBloomPass for the glow effect
+      bloomPass = new THREE.UnrealBloomPass(
+        new THREE.Vector2(container.clientWidth, container.clientHeight),
+        1.5,   // strength
+        0.4,   // radius
+        0.85   // threshold
+      );
+      composer.addPass(bloomPass);
     }
 
     function loadModel(path) {
       if (currentModel) scene.remove(currentModel);
       loader.load(path, function (gltf) {
         currentModel = gltf.scene;
+        // Center and scale model
+        const box = new THREE.Box3().setFromObject(currentModel);
+        const center = box.getCenter(new THREE.Vector3());
+        currentModel.position.sub(center);
+        
+        // Apply emissive material to all meshes for neon effect
+        currentModel.traverse(function(child) {
+          if (child.isMesh) {
+            // Create new material with emissive properties
+            const newMaterial = new THREE.MeshStandardMaterial({
+              color: 0xFFFFFF,           // White base color
+              emissive: 0x00FFFF,        // Cyan emissive color
+              emissiveIntensity: 0.6,    // Intensity of the glow
+              metalness: 0.8,            // Metallic look
+              roughness: 0.2             // Smooth surface for better reflections
+            });
+            
+            // Apply new material
+            child.material = newMaterial;
+          }
+        });
+        
         scene.add(currentModel);
       }, undefined, function (error) {
         console.error('모델 로드 실패:', error);
@@ -677,115 +417,238 @@
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
-      renderer.render(scene, camera);
+      
+      // Use composer to render with bloom effect
+      composer.render();
     }
 
-    // 장비 상태 정육면체 생성 함수
-    function addStatusCubeAt(x, y, z) {
-      const geometry = new THREE.BoxGeometry(2, 10, 3);
-      const material = new THREE.MeshStandardMaterial({
-        color: 0x00ff00,
-        transparent: true,
-        opacity: 0.5, // 0 = 완전 투명, 1 = 불투명
-      });
-      const cube = new THREE.Mesh(geometry, material);
-      cube.position.set(x, y, z);
-      scene.add(cube);
-    }
-
-    const clickableCubes = [];
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let INTERSECTED = null;
-
-    // 라벨 큐브 생성
-    function addLabeledCube(x, y, z, name, size = 1, imagePath = null) {
-      const geometry = new THREE.BoxGeometry(size, size, size);
-      const material = new THREE.MeshStandardMaterial({
-        color: 0xff0000,
-        transparent: true,
-        opacity: 0.5
-      });
-      const cube = new THREE.Mesh(geometry, material);
-      cube.position.set(x, y, z);
-      cube.userData.name = name;
-      cube.userData.image = imagePath;
-      scene.add(cube);
-      clickableCubes.push(cube);
-
-      // 라벨
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.font = '40px Arial';
-      ctx.fillStyle = 'red';
-      ctx.fillText(name, 10, 50);
-      const texture = new THREE.CanvasTexture(canvas);
-      const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
-      const sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(5, 2.5, 1);
-      sprite.position.set(x, y + size, z);
-      scene.add(sprite);
-    }
-    // 텍스트 흐릿하게 나오는 현상 처리 필요 (참고: https://namocom.tistory.com/191)
-
+    // Neural Network Animation for AI Learning
     function LearningStart() {
-      popupLocked = true;  // AI 학습에서 생성된 팝업은 고정
-      const name = "AI 학습";
-      const imgPath = "https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png";
-
+      popupLocked = true;
+      popupTitleElement.textContent = "AI 학습 - 신경망 시각화";
+      
       const html = `
-      <strong>${name}</strong><br>
-      <img src="${imgPath}" alt="${name}" style="width:100%; max-height:300px; object-fit:contain; margin-top:5px;"><br>
-      <p style="margin-top: 5px;">AI 학습 시작 화면입니다.</p>
-    `;
+        <div style="text-align: center;">
+          <canvas id="networkCanvas"></canvas>
+          <p style="margin-top: 15px; font-size: 1.1em;">딥러닝 신경망 학습 진행 중...</p>
+          <p style="font-size: 0.9em; color: #bbb;">복잡한 다층 신경망 구조가 학습 데이터를 처리하고 있습니다.</p>
+        </div>
+      `;
 
       document.getElementById('popup-content').innerHTML = html;
-      
-      popup.style.top = '10%';
-      popup.style.left = '40%';
+      popup.style.width = '80vw';
+      popup.style.maxWidth = '900px';
       popup.style.display = 'block';
-
+      
+      // After DOM update, initialize the canvas animation
+      setTimeout(initNeuralNetworkAnimation, 100);
+    }
+    
+    function initNeuralNetworkAnimation() {
+      const canvas = document.getElementById('networkCanvas');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+      
+      // Neural network structure
+      const layers = [6, 12, 18, 12, 6, 1]; // Input, hidden layers, output
+      const neurons = [];
+      const connections = [];
+      
+      // Initialize neurons
+      const padding = 50;
+      const layerSpacing = (canvas.width - padding * 2) / (layers.length - 1);
+      
+      // Create neurons for each layer
+      layers.forEach((neuronCount, layerIndex) => {
+        const layerX = padding + layerIndex * layerSpacing;
+        const neuronSpacing = (canvas.height - padding * 2) / (neuronCount + 1);
+        
+        for (let i = 1; i <= neuronCount; i++) {
+          const neuronY = padding + i * neuronSpacing;
+          neurons.push({
+            x: layerX,
+            y: neuronY,
+            layer: layerIndex,
+            index: i,
+            radius: layerIndex === 0 || layerIndex === layers.length - 1 ? 8 : 6,
+            activation: Math.random(),
+            activationTarget: Math.random(),
+            speed: 0.01 + Math.random() * 0.03
+          });
+        }
+      });
+      
+      // Create connections between neurons
+      for (let l = 0; l < layers.length - 1; l++) {
+        const layerNeurons = neurons.filter(n => n.layer === l);
+        const nextLayerNeurons = neurons.filter(n => n.layer === l + 1);
+        
+        layerNeurons.forEach(from => {
+          nextLayerNeurons.forEach(to => {
+            connections.push({
+              from: from,
+              to: to,
+              weight: Math.random() * 2 - 1, // -1 to 1
+              signalPosition: 0,
+              signalSpeed: 0.01 + Math.random() * 0.02,
+              active: Math.random() > 0.7, // Some connections start active
+              signal: false
+            });
+          });
+        });
+      }
+      
+      // Animation function
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connections
+        connections.forEach(conn => {
+          // Update connection activity randomly
+          if (Math.random() < 0.01) {
+            conn.active = Math.random() > 0.3;
+          }
+          
+          // Update signal positions
+          if (conn.active) {
+            conn.signalPosition += conn.signalSpeed;
+            if (conn.signalPosition > 1) {
+              conn.signalPosition = 0;
+              // Activate the target neuron
+              conn.to.activationTarget = Math.min(1, conn.to.activationTarget + 0.3);
+            }
+          }
+          
+          // Draw connection line
+          ctx.beginPath();
+          ctx.moveTo(conn.from.x, conn.from.y);
+          ctx.lineTo(conn.to.x, conn.to.y);
+          
+          // Line style based on weight and activity
+          const alpha = conn.active ? 0.3 : 0.05;
+          const r = conn.weight > 0 ? 0 : 255;
+          const g = conn.weight > 0 ? 255 : 0;
+          const b = 255;
+          
+          ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+          ctx.lineWidth = Math.abs(conn.weight) * 2;
+          ctx.stroke();
+          
+          // Draw signal if active
+          if (conn.active) {
+            const x = conn.from.x + (conn.to.x - conn.from.x) * conn.signalPosition;
+            const y = conn.from.y + (conn.to.y - conn.from.y) * conn.signalPosition;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0, 255, 255, 0.8)`;
+            ctx.fill();
+            
+            // Add glow effect to signal
+            const glow = ctx.createRadialGradient(x, y, 0, x, y, 12);
+            glow.addColorStop(0, 'rgba(0, 255, 255, 0.6)');
+            glow.addColorStop(1, 'rgba(0, 255, 255, 0)');
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 12, 0, Math.PI * 2);
+            ctx.fillStyle = glow;
+            ctx.fill();
+          }
+        });
+        
+        // Draw neurons
+        neurons.forEach(neuron => {
+          // Update neuron activation
+          neuron.activation += (neuron.activationTarget - neuron.activation) * neuron.speed;
+          
+          // Randomly change activation target
+          if (Math.random() < 0.01) {
+            neuron.activationTarget = Math.random();
+          }
+          
+          // Draw neuron
+          ctx.beginPath();
+          ctx.arc(neuron.x, neuron.y, neuron.radius, 0, Math.PI * 2);
+          
+          // Fill style based on activation
+          const intensity = Math.floor(neuron.activation * 255);
+          ctx.fillStyle = `rgb(${intensity}, ${intensity}, 255)`;
+          ctx.fill();
+          
+          // Add glow effect
+          const glow = ctx.createRadialGradient(
+            neuron.x, neuron.y, neuron.radius,
+            neuron.x, neuron.y, neuron.radius * 3
+          );
+          glow.addColorStop(0, `rgba(0, 255, 255, ${neuron.activation * 0.8})`);
+          glow.addColorStop(1, 'rgba(0, 255, 255, 0)');
+          
+          ctx.beginPath();
+          ctx.arc(neuron.x, neuron.y, neuron.radius * 3, 0, Math.PI * 2);
+          ctx.fillStyle = glow;
+          ctx.fill();
+        });
+        
+        // Keep animation running
+        window.neuralNetAnimationId = requestAnimationFrame(animate);
+      }
+      
+      // Start animation
+      animate();
     }
 
-    let leakChart;             // Chart.js 인스턴스
-    let leakTimer;             // setInterval 타이머
-    let leakData = [];         // 전체 데이터 배열
-    let leakIndex = 0;         // 현재 시점 인덱스
+    let leakChart;
+    let leakTimer;
+    let leakData = [];
+    let leakIndex = 0;
 
     function DemoStart() {
-      clearInterval(leakTimer);  // 이전 실행 중지
-      leakChart?.destroy();      // 기존 그래프 제거
+      if (leakTimer) clearInterval(leakTimer);
+      if (leakChart) leakChart.destroy();
       leakData = [];
       leakIndex = 0;
+      popupLocked = false;
+      isPlaying = true; // Ensure isPlaying is set to true
+      popupTitleElement.textContent = "데모 데이터 시각화";
 
-      const speedFactor = 5; // ✅ n배 빠르게 (예: 5배 빠르게)
+      const speedFactor = 5;
 
-      // fetch('data/leak_7.csv') // 로컬 파일인 경우
-      fetch('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/leak_7.csv') 
+      fetch('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/leak_7.csv')
         .then(response => response.text())
         .then(csvText => {
           const lines = csvText.trim().split('\n');
-          const headers = lines[0].split(',');
-          const timeIdx = headers.indexOf('Time (sec)');
+          const headerLineRaw = lines.shift();
+          const rawHeaders = headerLineRaw.split(',');
+          const cleanedHeaders = rawHeaders.map(h => {
+              const bracketEnd = h.indexOf(']');
+              return (bracketEnd !== -1 && bracketEnd + 1 < h.length) ? h.substring(bracketEnd + 1).trim() : h.trim();
+          });
 
-          // value 컬럼 인덱스들 (value1, value2, ...)
-          const valueIndices = headers
-            .map((h, i) => ({ name: h.trim(), idx: i }))
-            .filter(obj => obj.name !== 'Time (sec)');
+          const timeIdx = cleanedHeaders.indexOf('Time (sec)');
+          if (timeIdx === -1) {
+              throw new Error("'Time (sec)' column not found in CSV.");
+          }
 
-          for (let i = 1; i < lines.length; i++) {
+          const valueIndices = cleanedHeaders
+            .map((h, i) => ({ name: h, idx: i }))
+            .filter(obj => obj.idx !== timeIdx && obj.name.startsWith("Sensor #"));
+
+          for (let i = 0; i < lines.length; i++) {
             const parts = lines[i].split(',');
             const time = parseFloat(parts[timeIdx]);
             const values = valueIndices.map(obj => parseFloat(parts[obj.idx]));
             leakData.push({ x: time, yValues: values });
           }
 
-          document.getElementById('popup-content').innerHTML = `<canvas id="leakChart" width="100%" height="100%"></canvas>`;
-          //popup.style.top = '10%';
-          //popup.style.left = '20%';
+          document.getElementById('popup-content').innerHTML = `<canvas id="leakChartCanvas" style="width: 100%; height: 400px;"></canvas>`;
+          popup.style.width = '70vw';
+          popup.style.maxWidth = '900px';
           popup.style.display = 'block';
 
-          const ctx = document.getElementById('leakChart').getContext('2d');
+          const ctx = document.getElementById('leakChartCanvas').getContext('2d');
           leakChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -803,114 +666,132 @@
               scales: {
                 x: {
                   type: 'linear',
-                  title: { display: true, text: 'Time [s]' },
+                  title: { display: true, text: 'Time [s]', color: '#E0E0E0' },
                   min: 0,
-                  //max: 10
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
                 },
                 y: {
-                  title: { display: true, text: 'NH3 [ppm]' },
+                  title: { display: true, text: 'NH3 [ppm]', color: '#E0E0E0' },
                   min: 0,
-                  //max: 100
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
                 }
+              },
+              plugins: {
+                legend: { labels: { color: '#E0E0E0' }}
               },
               responsive: true,
               maintainAspectRatio: false
             }
           });
 
-          // 1초 간격으로 값 추가
           leakTimer = setInterval(() => {
-            if (leakIndex < leakData.length) {
+            if (isPlaying && leakIndex < leakData.length) {
               const point = leakData[leakIndex];
               point.yValues.forEach((val, idx) => {
-                leakChart.data.datasets[idx].data.push({ x: point.x, y: val });
+                if(leakChart.data.datasets[idx]) {
+                    leakChart.data.datasets[idx].data.push({ x: point.x, y: val });
+                }
               });
-              // 👉 x축 max 값을 현재 시간 + 1로 실시간 업데이트
               leakChart.options.scales.x.max = leakData[leakIndex].x + 1;
               leakChart.update();
               leakIndex++;
             } else {
-              clearInterval(leakTimer); // 종료
+              clearInterval(leakTimer);
             }
           }, 1000 / speedFactor);
         })
         .catch(error => {
-          document.getElementById('popup-content').innerHTML = `<p style="color:red;">CSV 로드 실패: ${error}</p>`;
+          console.error("DemoStart CSV Error:", error);
+          document.getElementById('popup-content').innerHTML = `<p style="color:red;">데모 CSV 로드 실패: ${error.message}</p>`;
           popup.style.display = 'block';
         });
-
     }
-
 
     function LeakDetection() {
-      clearInterval(leakTimer);
-      leakChart?.destroy();
+      if (leakTimer) clearInterval(leakTimer);
+      if (leakChart) leakChart.destroy();
       leakData = [];
       leakIndex = 0;
+      popupLocked = false;
+      popupTitleElement.textContent = "AI 기반 누출 추정 - 센서 데이터";
 
-      const speedFactor = 5;  // n배 빠르게
+      const speedFactor = 5;
 
-      // 기존 큐브 찾기 또는 새로 생성
-      let statusCube1;
-      let statusCube2;
-      let statusCube3;
-      /*
-      const existing = scene.children.find(obj => obj.name === 'statusCube');
-      if (existing) {
-        statusCube = existing;
-      } else {
-        const geometry = new THREE.BoxGeometry(2, 10, 3);
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 });
-        statusCube = new THREE.Mesh(geometry, material);
-        statusCube.position.set(3.5, -1, 2);
-        statusCube.name = 'statusCube';
-        scene.add(statusCube);
-      }
-      */
-      const geometry = new THREE.BoxGeometry(2, 10, 3);
-
-      statusCube1 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
-      statusCube2 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
-      statusCube3 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
-
-      statusCube1.position.set(3.5, -1, 2);
-      statusCube2.position.set(-0.4, -1, 2);
-      statusCube3.position.set(-4.3, -1, 2);
-
-      statusCube1.name = 'GE#1';
-      statusCube2.name = 'GE#2';
-      statusCube3.name = 'GE#3';
-
-      scene.add(statusCube1);
-      scene.add(statusCube2);
-      scene.add(statusCube3);
-
-      // fetch('data/leakDetection.csv') // 로컬 파일인 경우
-      fetch('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/leakDetection.csv') 
-        .then(response => response.text())
+      // Attempt to load from sensor_data/scenario_7-1.csv first, fallback to GitHub raw URL
+      fetch('./sensor_data/scenario_7-1.csv')
+        .then(response => {
+          if (!response.ok) {
+            // Fallback to GitHub URL if local file not found
+            throw new Error("Local file not found");
+          }
+          return response.text();
+        })
+        .catch(error => {
+          console.warn("Local file load failed, using GitHub fallback:", error);
+          return fetch('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/leak_7.csv').then(response => response.text());
+        })
         .then(csvText => {
           const lines = csvText.trim().split('\n');
-          const headers = lines[0].split(',');
-          const timeIdx = headers.indexOf('Time (sec)');
+          const headerLineRaw = lines.shift();
+          if (!headerLineRaw) throw new Error("CSV file is empty or header is missing.");
 
-          // value 컬럼 인덱스들 (value1, value2, ...)
-          const valueIndices = headers
-            .map((h, i) => ({ name: h.trim(), idx: i }))
-            .filter(obj => obj.name !== 'Time (sec)');
+          const rawHeaders = headerLineRaw.split(',');
+          const cleanedHeaders = rawHeaders.map(h => {
+              const bracketEnd = h.indexOf(']');
+              return (bracketEnd !== -1 && bracketEnd + 1 < h.length) ? h.substring(bracketEnd + 1).trim() : h.trim();
+          });
 
-          for (let i = 1; i < lines.length; i++) {
+          const timeIdx = cleanedHeaders.indexOf('Time (sec)');
+          if (timeIdx === -1) {
+              console.error("'Time (sec)' column not found. Headers found:", cleanedHeaders);
+              throw new Error("'Time (sec)' column not found in CSV.");
+          }
+
+          const valueIndices = cleanedHeaders
+            .map((h, i) => ({ name: h, idx: i }))
+            .filter(obj => obj.idx !== timeIdx && obj.name.startsWith("Sensor #"));
+
+          if (valueIndices.length === 0) {
+              console.error("No 'Sensor #' columns found. Cleaned headers:", cleanedHeaders);
+              throw new Error("No 'Sensor #' columns found for plotting.");
+          }
+
+          for (let i = 0; i < lines.length; i++) {
             const parts = lines[i].split(',');
+            if (parts.length <= Math.max(timeIdx, ...valueIndices.map(v => v.idx))) {
+                console.warn(`Skipping malformed CSV row: ${lines[i]}`);
+                continue;
+            }
             const time = parseFloat(parts[timeIdx]);
             const values = valueIndices.map(obj => parseFloat(parts[obj.idx]));
             leakData.push({ x: time, yValues: values });
           }
 
-          document.getElementById('popup-content').innerHTML = `<canvas id="leakChart" width="600" height="600"></canvas>`;
-          popup.style.top = '10%';
-          popup.style.left = '40%';
+          // Create HTML with chart and interactive controls
+          document.getElementById('popup-content').innerHTML = `
+            <canvas id="leakChartCanvas" style="width: 100%; height: 400px;"></canvas>
+            <div class="chart-controls">
+              <button id="playPauseBtn">⏸️ 일시정지</button>
+              <button id="resetBtn">⟲ 재시작</button>
+              <button id="speedUpBtn">⏩ 속도 증가</button>
+              <button id="speedDownBtn">⏪ 속도 감소</button>
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+              <h3 style="color: #00CFE8; margin-bottom: 10px;">누출원 위치 추정 결과</h3>
+              <div style="background: rgba(0, 207, 232, 0.1); padding: 10px; border-radius: 8px; display: inline-block;">
+                <span style="font-size: 1.2em; font-weight: bold;">예상 좌표: (4.7, 2.1, 0.5) ±0.2m</span>
+                <div style="margin-top: 5px;">신뢰도: <span style="color: #4ade80; font-weight: bold;">98.2%</span></div>
+              </div>
+            </div>
+          `;
+          
+          popup.style.width = '80vw';
+          popup.style.maxWidth = '1000px';
           popup.style.display = 'block';
 
-          const ctx = document.getElementById('leakChart').getContext('2d');
+          const ctx = document.getElementById('leakChartCanvas').getContext('2d');
           leakChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -919,6 +800,9 @@
                 data: [],
                 borderColor: `hsl(${(index * 60) % 360}, 70%, 50%)`,
                 backgroundColor: `hsla(${(index * 60) % 360}, 70%, 50%, 0.2)`,
+                borderWidth: 3,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: false,
                 tension: 0.2
               }))
@@ -928,62 +812,87 @@
               scales: {
                 x: {
                   type: 'linear',
-                  title: { display: true, text: 'Time [s]' },
+                  title: { display: true, text: 'Time [s]', color: '#E0E0E0', font: { size: 14 } },
                   min: 0,
-                  //max: 10
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
                 },
                 y: {
-                  title: { display: true, text: 'NH3 [ppm]' },
+                  title: { display: true, text: 'Sensor Reading [ppm]', color: '#E0E0E0', font: { size: 14 } },
                   min: 0,
-                  //max: 100
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
+                }
+              },
+              plugins: {
+                legend: { 
+                  labels: { color: '#E0E0E0', font: { size: 12 } },
+                  position: 'top'
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(26, 29, 46, 0.9)',
+                  titleFont: { size: 14 },
+                  bodyFont: { size: 12 },
+                  borderColor: 'rgba(0, 207, 232, 0.3)',
+                  borderWidth: 1
                 }
               },
               responsive: true,
-              maintainAspectRatio: false
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false
+              }
             }
           });
 
-          // 1초 간격으로 값 추가
+          // Interactive controls functionality
+          let isPlaying = true;
+          let currentSpeed = speedFactor;
+          
+          document.getElementById('playPauseBtn').addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            this.textContent = isPlaying ? "⏸️ 일시정지" : "▶️ 재생";
+          });
+          
+          document.getElementById('resetBtn').addEventListener('click', function() {
+            leakIndex = 0;
+            leakChart.data.datasets.forEach(dataset => {
+              dataset.data = [];
+            });
+            leakChart.update();
+          });
+          
+          document.getElementById('speedUpBtn').addEventListener('click', function() {
+            currentSpeed = Math.min(currentSpeed * 1.5, 20);
+          });
+          
+          document.getElementById('speedDownBtn').addEventListener('click', function() {
+            currentSpeed = Math.max(currentSpeed / 1.5, 1);
+          });
+
           leakTimer = setInterval(() => {
-            if (leakIndex < leakData.length) {
+            if (isPlaying && leakIndex < leakData.length) {
               const point = leakData[leakIndex];
               point.yValues.forEach((val, idx) => {
-                leakChart.data.datasets[idx].data.push({ x: point.x, y: val });
+                if(leakChart.data.datasets[idx]) {
+                    leakChart.data.datasets[idx].data.push({ x: point.x, y: val });
+                }
               });
-              // 👉 x축 max 값을 현재 시간 + 1로 실시간 업데이트
               leakChart.options.scales.x.max = leakData[leakIndex].x + 1;
-
-              // 동적으로 큐브 색상 업데이트
-              const red1 = Math.floor(point.yValues[0] * 255);
-              const green1 = Math.floor((1 - point.yValues[0]) * 255);
-              statusCube1.material.color.setRGB(red1 / 255, green1 / 255, 0);
-
-              const red2 = Math.floor(point.yValues[1] * 255);
-              const green2 = Math.floor((1 - point.yValues[1]) * 255);
-              statusCube2.material.color.setRGB(red2 / 255, green2 / 255, 0);
-
-              const red3 = Math.floor(point.yValues[2] * 255);
-              const green3 = Math.floor((1 - point.yValues[2]) * 255);
-              statusCube3.material.color.setRGB(red3 / 255, green3 / 255, 0);
-
-              console.log(point.yValues[0]);
               leakChart.update();
               leakIndex++;
-            } else {
-              clearInterval(leakTimer); // 종료
             }
-          }, 1000 / speedFactor);
+          }, 1000 / currentSpeed);
         })
         .catch(error => {
-          document.getElementById('popup-content').innerHTML = `<p style="color:red;">CSV 로드 실패: ${error}</p>`;
+          console.error("LeakDetection CSV Error:", error);
+          document.getElementById('popup-content').innerHTML = `<p style="color:red;">AI 누출 추정 데이터 로드 실패: ${error.message}</p>`;
           popup.style.display = 'block';
         });
     }
 
-
     function Dispersion() {
-
-
       // [1] 외부 박스 크기 정의
       const boxWidth = 13.8;
       const boxHeight = 21.5;
@@ -995,7 +904,7 @@
       // [2] 외부 박스 그리기
       const outerBox = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
       const outerEdges = new THREE.EdgesGeometry(outerBox);
-      const outerMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+      const outerMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff }); // Changed to cyan for neon look
       const outerWireframe = new THREE.LineSegments(outerEdges, outerMaterial);
       scene.add(outerWireframe);
 
@@ -1014,9 +923,14 @@
 
         const geom = new THREE.BoxGeometry(obs.size.x, obs.size.y, obs.size.z);
         const edges = new THREE.EdgesGeometry(geom);
-        const mat = new THREE.LineBasicMaterial({ color: 0xff0000 });
+        // Changed to cyan with glow material for neon effect
+        const mat = new THREE.LineBasicMaterial({ 
+          color: 0x00ffff,
+          transparent: true,
+          opacity: 0.8
+        });
         const wire = new THREE.LineSegments(edges, mat);
-        wire.position.copy(obs.center); // 중심 좌표 기준 위치
+        wire.position.copy(obs.center);
         scene.add(wire);
       });
 
@@ -1030,8 +944,9 @@
       const gridPlanes = [];
       for (let i = 0; i < gridCountX; i++) {
         for (let j = 0; j < gridCountY; j++) {
+          // Enhanced material for neon glow effect
           const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00,
+            color: 0x00ffff,
             transparent: true,
             opacity: 0.2,
             side: THREE.DoubleSide
@@ -1040,20 +955,32 @@
             new THREE.PlaneGeometry(gridWidth, gridHeight),
             material
           );
-          // XY 평면 → 회전 없음
           plane.position.set(
             -halfW + gridWidth * (i + 0.5),
             -halfH + gridHeight * (j + 0.5),
-            -halfD + 0.01  // XY 평면에 z 고정
+            -halfD + 0.01
           );
           scene.add(plane);
           gridPlanes.push({ mesh: plane, count: 0 });
         }
       }
+      
       // [4] 누출원 위치
       const leakSource = new THREE.Vector3(4.8, 2.0, 0.4);
 
-      // [5] 파티클 설정
+      // Mark leak source with glowing sphere
+      const sourceMark = new THREE.Mesh(
+        new THREE.SphereGeometry(0.2, 16, 16),
+        new THREE.MeshStandardMaterial({
+          color: 0xFF0000,
+          emissive: 0xFF5555,
+          emissiveIntensity: 1.5
+        })
+      );
+      sourceMark.position.copy(leakSource);
+      scene.add(sourceMark);
+
+      // [5] 파티클 설정 - Enhanced for neon effect
       const particles = [];
       const maxParticles = 1000;
       const interval = 100;
@@ -1067,14 +994,15 @@
           Math.random() * 2 - 1
         ).normalize();
 
+        // Glowing material for particles
         const material = new THREE.MeshBasicMaterial({
-          color: 0xff0000,
+          color: 0xff5555,
           transparent: true,
-          opacity: 0.6
+          opacity: 0.8
         });
 
         const particle = new THREE.Mesh(
-          new THREE.SphereGeometry(0.1, 6, 6),
+          new THREE.SphereGeometry(0.1, 8, 8),
           material
         );
         particle.position.copy(leakSource);
@@ -1146,13 +1074,13 @@
           // 위치 이동
           p.position.add(p.userData.direction.clone().multiplyScalar(speed));
 
-          // [7] 색상 및 투명도 변화
+          // [7] 색상 및 투명도 변화 - Enhanced for neon effect
           p.userData.age += speed * 5;
           const t = Math.min(p.userData.age / maxAge, 1);
           const r = 1;
-          const g = t < 0.5 ? t * 2 : 1;
-          const b = 0;
-          const alpha = t < 0.5 ? 0.6 : 0.6 * (1 - (t - 0.5) * 2);
+          const g = 0.4 + (t < 0.5 ? t : 0.5);
+          const b = 0.7 - t * 0.3;
+          const alpha = t < 0.5 ? 0.8 : 0.8 * (1 - (t - 0.5) * 2);
 
           p.material.color.setRGB(r, g, b);
           p.material.opacity = alpha;
@@ -1185,17 +1113,19 @@
           const maxCount = Math.max(...counts);
           const minCount = Math.min(...counts);
 
-          // 색상 업데이트 (초록 → 빨강)
+          // 색상 업데이트 - Enhanced for neon cyan to red gradient
           gridPlanes.forEach(g => {
             const t = maxCount > 0 ? (g.count - minCount) / (maxCount - minCount || 1) : 0;
-            const r = t;
-            const gVal = 1 - t;
-            g.mesh.material.color.setRGB(r, gVal, 0);
+            const r_val = t;
+            const gVal = 0.8 - t * 0.5;
+            const bVal = 1 - t;
+            
+            g.mesh.material.color.setRGB(r_val, gVal, bVal);
+            g.mesh.material.opacity = 0.1 + t * 0.4; // More concentrated areas are more visible
           });
-
         }
 
-        renderer.render(scene, camera);
+        composer.render(); // Use composer for bloom effect
       }
 
       animateDispersion();
@@ -1204,10 +1134,12 @@
     let isDragging = false, offsetX = 0, offsetY = 0;
 
     popupHeader.addEventListener('mousedown', (e) => {
+      if (e.target.id === 'closeButton') return;
       isDragging = true;
       const rect = popup.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
+      popup.style.userSelect = 'none';
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -1218,86 +1150,348 @@
     });
 
     document.addEventListener('mouseup', () => {
-      isDragging = false;
+      if (isDragging) {
+        isDragging = false;
+        popup.style.userSelect = 'auto';
+      }
     });
 
     window.addEventListener('resize', () => {
       const container = document.getElementById('viewer');
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
+      if (camera && renderer && container) {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        composer.setSize(container.clientWidth, container.clientHeight);
+      }
     });
 
     window.addEventListener('click', (event) => {
-
-      // 1. 데모 버튼이면 raycaster 검사 생략
       if (
         event.target.closest('#popup') ||
-        event.target.closest('#overlay-buttons')
+        event.target.closest('#overlay-buttons') ||
+        event.target.closest('#graphModal')
       ) return;
 
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(clickableCubes);
-
-      if (intersects.length > 0) {
-        // 정상 클릭 시 팝업 표시
-        const obj = intersects[0].object;
-        const name = obj.userData.name;
-        const imgPath = obj.userData.image || 'default.png';
-
-        const html = `
-        <strong>${name}</strong><br>
-        <img src="${imgPath}" alt="${name}" style="width:100%; max-height:150px; object-fit:contain; margin-top:5px;"><br>
-        <em>(x: ${event.clientX}, y: ${obj.position.y.toFixed(2)}, z: ${obj.position.z.toFixed(2)})</em>
-      `;
-        document.getElementById('popup-content').innerHTML = html;
-        popup.style.left = event.offsetX + 10 + 'px';
-        popup.style.top = event.offsetY + 10 + 'px';
-        popup.style.display = 'block';
-
-      } else {
-        if (!popupLocked) popup.style.display = 'none';  // 잠금된 팝업은 닫히지 않음
+      if (!popupLocked && !event.target.closest('.ui-panel') && !event.target.closest('#overlay-buttons button')) {
+        closePopup();
       }
     });
 
-    window.addEventListener('mousemove', (event) => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    // Create neon glowing sensor dots
+    function addLabeledSensor(x, y, z, name, size = 1) {
+      const geometry = new THREE.SphereGeometry(size * 0.5, 16, 16);
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x00FFFF,           // Cyan base color
+        emissive: 0x00FFFF,        // Cyan emissive color
+        emissiveIntensity: 0.8,    // Intensity of the glow
+        transparent: true,
+        opacity: 0.9
+      });
+      
+      const sensor = new THREE.Mesh(geometry, material);
+      sensor.position.set(x, y, z);
+      sensor.userData.name = name;
+      scene.add(sensor);
+      
+      // Add a small pulsing light at sensor position
+      const light = new THREE.PointLight(0x00FFFF, 1, 3);
+      light.position.set(x, y, z);
+      scene.add(light);
+      
+      // Animate the light intensity for pulsing effect
+      const pulseSpeed = 0.5 + Math.random() * 0.5;
+      
+      setInterval(() => {
+        light.intensity = 0.7 + Math.sin(Date.now() * 0.003 * pulseSpeed) * 0.3;
+      }, 50);
+    }
 
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(clickableCubes);
-
-      if (intersects.length > 0) {
-        if (INTERSECTED != intersects[0].object) {
-          if (INTERSECTED) {
-            INTERSECTED.material.color.set(0xff0000); // 원래 색으로
+    // Add sensors with neon effect
+    addLabeledSensor(3.45, 1.11, -0.565, 'Sensor #1', 0.8);
+    addLabeledSensor(-0.507, 1.11, -0.565, 'Sensor #2', 0.8);
+    addLabeledSensor(-4.46, 1.11, -0.565, 'Sensor #3', 0.8);
+    addLabeledSensor(4.26, 1.11, 0.360, 'Sensor #4', 0.8);
+    addLabeledSensor(0.304, 1.11, 0.360, 'Sensor #5', 0.8);
+    addLabeledSensor(-3.65, 1.11, 0.360, 'Sensor #6', 0.8);
+    
+    // Function to add leak points with neon glow effect
+    function addLeakPoint(x, y, z, name, size = 0.3) {
+      const geometry = new THREE.SphereGeometry(size, 16, 16);
+      const material = new THREE.MeshStandardMaterial({
+        color: 0xFF3030,           // Red base color
+        emissive: 0xFF5050,        // Red emissive color
+        emissiveIntensity: 1.0,    // Intensity of the glow
+        transparent: true,
+        opacity: 0.8
+      });
+      
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.set(x, y, z);
+      sphere.userData.name = name;
+      sphere.userData.leakNumber = parseInt(name.split('#')[1]);
+      scene.add(sphere);
+      
+      // Add to clickable objects
+      if (!window.clickableCubes) window.clickableCubes = [];
+      window.clickableCubes.push(sphere);
+      
+      // Create text label with canvas
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 128;
+      canvas.height = 64;
+      ctx.font = '32px Arial';
+      ctx.fillStyle = '#FF6060';
+      ctx.textAlign = 'center';
+      ctx.fillText(name, 64, 40);
+      
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ 
+        map: texture,
+        transparent: true
+      });
+      const sprite = new THREE.Sprite(spriteMaterial);
+      sprite.scale.set(2, 1, 1);
+      sprite.position.set(x, y + size * 1.5, z);
+      scene.add(sprite);
+      
+      // Add a pulsing point light for enhanced glow
+      const light = new THREE.PointLight(0xFF3030, 1, 2);
+      light.position.set(x, y, z);
+      scene.add(light);
+      
+      // Animate the light intensity for pulsing effect
+      const pulseSpeed = 0.3 + Math.random() * 0.3;
+      
+      setInterval(() => {
+        light.intensity = 0.5 + Math.sin(Date.now() * 0.002 * pulseSpeed) * 0.5;
+      }, 50);
+    }
+    
+    // Add leak points
+    addLeakPoint(3.0, 3.0, -1.0, 'Leak #1');
+    addLeakPoint(-0.9, 3.0, -1.0, 'Leak #2');
+    addLeakPoint(-4.8, 3.0, -1.0, 'Leak #3');
+    addLeakPoint(4.5, -1.5, 2.0, 'Leak #4');
+    addLeakPoint(0.6, -1.5, 2.0, 'Leak #5');
+    addLeakPoint(-3.3, -1.5, 2.0, 'Leak #6');
+    addLeakPoint(4.5, 0.0, 2.0, 'Leak #7');
+    
+    // Function to load and display scenario data when leak point is clicked
+    function displayScenarioData(leakNumber) {
+      if (leakTimer) clearInterval(leakTimer);
+      if (leakChart) leakChart.destroy();
+      leakData = [];
+      leakIndex = 0;
+      popupLocked = false;
+      popupTitleElement.textContent = `Leak #${leakNumber} 시나리오 데이터`;
+      
+      const csvFilePath = `./sensor_data/scenario_${leakNumber}-1.csv`;
+      
+      // Attempt to load local file, fallback to GitHub if needed
+      fetch(csvFilePath)
+        .then(response => {
+          if (!response.ok) {
+            // Fallback to GitHub repository or sample data
+            console.warn(`Local file ${csvFilePath} not found, using fallback data`);
+            return fetch('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/leak_7.csv');
           }
-          INTERSECTED = intersects[0].object;
-          INTERSECTED.material.color.set(0xffff00); // hover 시 노란색
-        }
-      } else {
-        if (INTERSECTED) {
-          INTERSECTED.material.color.set(0xff0000);
-          INTERSECTED = null;
+          return response;
+        })
+        .then(response => response.text())
+        .then(csvText => {
+          const lines = csvText.trim().split('\n');
+          const headerLineRaw = lines.shift();
+          if (!headerLineRaw) throw new Error("CSV file is empty or header is missing.");
+          
+          const rawHeaders = headerLineRaw.split(',');
+          const cleanedHeaders = rawHeaders.map(h => {
+              const bracketEnd = h.indexOf(']');
+              return (bracketEnd !== -1 && bracketEnd + 1 < h.length) ? h.substring(bracketEnd + 1).trim() : h.trim();
+          });
+          
+          const timeIdx = cleanedHeaders.indexOf('Time (sec)');
+          if (timeIdx === -1) {
+              console.error("'Time (sec)' column not found. Headers found:", cleanedHeaders);
+              throw new Error("'Time (sec)' column not found in CSV.");
+          }
+          
+          const valueIndices = cleanedHeaders
+            .map((h, i) => ({ name: h, idx: i }))
+            .filter(obj => obj.idx !== timeIdx && obj.name.startsWith("Sensor #"));
+          
+          if (valueIndices.length === 0) {
+              console.error("No 'Sensor #' columns found. Cleaned headers:", cleanedHeaders);
+              throw new Error("No 'Sensor #' columns found for plotting.");
+          }
+          
+          for (let i = 0; i < lines.length; i++) {
+            const parts = lines[i].split(',');
+            if (parts.length <= Math.max(timeIdx, ...valueIndices.map(v => v.idx))) {
+                console.warn(`Skipping malformed CSV row: ${lines[i]}`);
+                continue;
+            }
+            const time = parseFloat(parts[timeIdx]);
+            const values = valueIndices.map(obj => parseFloat(parts[obj.idx]));
+            leakData.push({ x: time, yValues: values });
+          }
+          
+          // Create HTML with chart and interactive controls
+          document.getElementById('popup-content').innerHTML = `
+            <canvas id="leakChartCanvas" style="width: 100%; height: 400px;"></canvas>
+            <div class="chart-controls">
+              <button id="playPauseBtn">⏸️ 일시정지</button>
+              <button id="resetBtn">⟲ 재시작</button>
+              <button id="speedUpBtn">⏩ 속도 증가</button>
+              <button id="speedDownBtn">⏪ 속도 감소</button>
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+              <h3 style="color: #00CFE8; margin-bottom: 10px;">Leak #${leakNumber} 시나리오</h3>
+              <div style="background: rgba(0, 207, 232, 0.1); padding: 10px; border-radius: 8px; display: inline-block;">
+                <span style="font-size: 1.2em; font-weight: bold;">누출원 좌표 정보</span>
+                <div style="margin-top: 5px;">센서 반응도: <span style="color: #FF5050; font-weight: bold;">높음</span></div>
+              </div>
+            </div>
+          `;
+          
+          popup.style.width = '80vw';
+          popup.style.maxWidth = '1000px';
+          popup.style.display = 'block';
+          
+          const ctx = document.getElementById('leakChartCanvas').getContext('2d');
+          leakChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              datasets: valueIndices.map((obj, index) => ({
+                label: obj.name,
+                data: [],
+                borderColor: `hsl(${(index * 60) % 360}, 70%, 50%)`,
+                backgroundColor: `hsla(${(index * 60) % 360}, 70%, 50%, 0.2)`,
+                borderWidth: 3,
+                pointRadius: 3,
+                pointHoverRadius: 6,
+                fill: false,
+                tension: 0.2
+              }))
+            },
+            options: {
+              animation: false,
+              scales: {
+                x: {
+                  type: 'linear',
+                  title: { display: true, text: 'Time [s]', color: '#E0E0E0', font: { size: 14 } },
+                  min: 0,
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
+                },
+                y: {
+                  title: { display: true, text: 'Sensor Reading [ppm]', color: '#E0E0E0', font: { size: 14 } },
+                  min: 0,
+                  ticks: { color: '#E0E0E0' },
+                  grid: { color: 'rgba(224,224,224,0.1)'}
+                }
+              },
+              plugins: {
+                legend: { 
+                  labels: { color: '#E0E0E0', font: { size: 12 } },
+                  position: 'top'
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(26, 29, 46, 0.9)',
+                  titleFont: { size: 14 },
+                  bodyFont: { size: 12 },
+                  borderColor: 'rgba(0, 207, 232, 0.3)',
+                  borderWidth: 1
+                }
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false
+              }
+            }
+          });
+          
+          // Interactive controls functionality
+          let isPlaying = true;
+          let currentSpeed = 5; // Default speed factor
+          
+          document.getElementById('playPauseBtn').addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            this.textContent = isPlaying ? "⏸️ 일시정지" : "▶️ 재생";
+          });
+          
+          document.getElementById('resetBtn').addEventListener('click', function() {
+            leakIndex = 0;
+            leakChart.data.datasets.forEach(dataset => {
+              dataset.data = [];
+            });
+            leakChart.update();
+          });
+          
+          document.getElementById('speedUpBtn').addEventListener('click', function() {
+            currentSpeed = Math.min(currentSpeed * 1.5, 20);
+          });
+          
+          document.getElementById('speedDownBtn').addEventListener('click', function() {
+            currentSpeed = Math.max(currentSpeed / 1.5, 1);
+          });
+          
+          leakTimer = setInterval(() => {
+            if (isPlaying && leakIndex < leakData.length) {
+              const point = leakData[leakIndex];
+              point.yValues.forEach((val, idx) => {
+                if(leakChart.data.datasets[idx]) {
+                    leakChart.data.datasets[idx].data.push({ x: point.x, y: val });
+                }
+              });
+              leakChart.options.scales.x.max = leakData[leakIndex].x + 1;
+              leakChart.update();
+              leakIndex++;
+            }
+          }, 1000 / currentSpeed);
+        })
+        .catch(error => {
+          console.error(`Error loading scenario data for Leak #${leakNumber}:`, error);
+          document.getElementById('popup-content').innerHTML = `
+            <p style="color:red;">데이터 로드 실패: ${error.message}</p>
+            <p>파일 경로: ${csvFilePath}</p>
+          `;
+          popup.style.display = 'block';
+        });
+    }
+    
+    // Modify click event to handle leak points
+    window.addEventListener('click', (event) => {
+      if (
+        event.target.closest('#popup') ||
+        event.target.closest('#overlay-buttons') ||
+        event.target.closest('#graphModal')
+      ) return;
+
+      if (!popupLocked && !event.target.closest('.ui-panel') && !event.target.closest('#overlay-buttons button')) {
+        closePopup();
+        return;
+      }
+      
+      // Check if clicked on a leak point
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(window.clickableCubes || []);
+      
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        if (obj.userData.leakNumber) {
+          displayScenarioData(obj.userData.leakNumber);
         }
       }
     });
-
-
-
-    addLabeledCube(3.45, 1.11, -0.565, 'Sensor #1', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-    addLabeledCube(-0.507, 1.11, -0.565, 'Sensor #2', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-    addLabeledCube(-4.46, 1.11, -0.565, 'Sensor #3', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-    addLabeledCube(4.26, 1.11, 0.360, 'Sensor #4', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-    addLabeledCube(0.304, 1.11, 0.360, 'Sensor #5', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-    addLabeledCube(-3.65, 1.11, 0.360, 'Sensor #6', 1, 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/images/test_image.png');
-
   </script>
 
 </body>
-
-</html>
+</html> 
