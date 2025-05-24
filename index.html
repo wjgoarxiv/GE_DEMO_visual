@@ -177,8 +177,9 @@
 
     #popup {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: rgba(248, 249, 250, 0.95);
       backdrop-filter: blur(10px) saturate(180%);
       -webkit-backdrop-filter: blur(10px) saturate(180%);
@@ -187,24 +188,23 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       font-size: 13px;
       z-index: 9999;
-      width: 450px;
+      width: 600px;
       max-width: 90vw;
-      height: 350px;
-      max-height: 70vh;
+      height: 450px;
+      max-height: 80vh;
       overflow: hidden;
       box-sizing: border-box;
       
       /* Animation properties */
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px) scale(0.95);
       transition: all 0.5s cubic-bezier(0.86,0,0.07,1);
     }
 
     #popup.show {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0) scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     /* Sensor status indicator animation */
@@ -287,7 +287,7 @@
     /* Neural network animation canvas */
     #networkCanvas {
       width: 100%;
-      height: 450px;
+      height: 350px;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       border-radius: 12px;
       margin-top: 10px;
@@ -340,70 +340,364 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
+    /* Mobile Sidebar */
+    .mobile-sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 280px;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 15000;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .mobile-sidebar.open {
+      left: 0;
+    }
+
+    .mobile-sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 14000;
+    }
+
+    .mobile-sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 123, 255, 0.2);
+    }
+
+    .sidebar-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #007bff;
+    }
+
+    .sidebar-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #666;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-close:hover {
+      background: rgba(0, 123, 255, 0.1);
+      color: #007bff;
+    }
+
+    .sidebar-section {
+      margin-bottom: 25px;
+    }
+
+    .sidebar-section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-button {
+      width: 100%;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #007bff;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #007bff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-button:hover, .sidebar-button:active {
+      background: rgba(0, 123, 255, 0.1);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Better touch feedback for mobile */
+    @media (hover: none) and (pointer: coarse) {
+      .sidebar-button:active {
+        background: rgba(0, 123, 255, 0.2);
+        transform: scale(0.98);
+      }
+      
+      .sidebar-leak-button:active {
+        background: rgba(220, 53, 69, 0.2);
+        transform: scale(0.98);
+      }
+      
+      .mobile-menu-toggle:active {
+        transform: scale(0.95);
+      }
+    }
+
+    .sidebar-leak-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .sidebar-leak-button {
+      padding: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #dc3545;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #dc3545;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .sidebar-leak-button:hover, .sidebar-leak-button:active {
+      background: rgba(220, 53, 69, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger Menu */
+    .mobile-menu-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 16000;
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 2px solid #007bff;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu-toggle:hover {
+      background: rgba(0, 123, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    .hamburger-line {
+      width: 20px;
+      height: 2px;
+      background: #007bff;
+      transition: all 0.3s ease;
+      border-radius: 1px;
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
     /* Mobile responsive styles */
     @media (max-width: 768px) {
-      #overlay-buttons {
-        top: 10px;
-        left: 10px;
-        gap: 8px;
-        max-width: 180px;
-      }
-
-      #overlay-buttons button {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-        min-width: 100px;
-      }
-
+      /* Hide desktop buttons and show mobile menu */
+      #overlay-buttons,
       #leak-buttons {
-        top: 180px; /* Adjusted for mobile */
-        left: 10px;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-        max-width: 180px;
+        display: none !important;
       }
 
-      #leak-buttons button {
-        padding: 6px 10px;
-        font-size: 0.75rem;
+      .mobile-menu-toggle {
+        display: flex;
       }
 
-      #toggle-labels-btn {
-        bottom: 10px;
-        right: 10px;
-        padding: 8px 12px;
-        font-size: 0.8rem;
+      .toggle-container {
+        top: 20px;
+        left: 80px; /* Position after hamburger menu */
       }
 
+      #guide-button {
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        border-radius: 50%;
+      }
+
+      /* Hide text on mobile, show only emoji */
+      #guide-button .guide-text {
+        display: none;
+      }
+
+      /* Enhanced mobile popup styles */
       #popup {
-        width: 95vw;
-        height: 60vh;
-        bottom: 10px;
-        right: 10px;
+        width: 95vw !important;
+        height: 70vh !important;
+        max-width: 95vw !important;
+        max-height: 70vh !important;
+        bottom: 2.5vw !important;
+        right: 2.5vw !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      #popup-header {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+        height: 45px;
+      }
+
+      #popup-content {
+        height: calc(100% - 45px);
+        padding: 12px;
+        font-size: 0.85rem;
+      }
+
+      /* Neural network canvas mobile optimization */
+      #networkCanvas {
+        height: 300px !important;
+      }
+
+      /* Chart optimization for mobile */
+      #leakChart {
+        height: 300px !important;
+        min-height: 300px !important;
       }
 
       .sensor-label {
-        font-size: 10px;
-        padding: 3px 6px;
+        font-size: 9px;
+        padding: 2px 5px;
+      }
+
+      /* Better touch targets for mobile */
+      .sidebar-button {
+        min-height: 50px;
+      }
+
+      .sidebar-leak-button {
+        min-height: 45px;
       }
     }
 
     @media (max-width: 480px) {
-      #leak-buttons {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 150px;
-      }
-
-      #leak-buttons button {
-        padding: 5px 8px;
-        font-size: 0.7rem;
+      .mobile-sidebar {
+        width: 90vw;
+        left: -90vw;
       }
 
       #popup {
-        width: 98vw;
-        height: 70vh;
-        bottom: 5px;
-        right: 5px;
+        width: 98vw !important;
+        height: 75vh !important;
+        bottom: 1vw !important;
+        right: 1vw !important;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      #popup-header {
+        font-size: 0.85rem;
+        height: 40px;
+        padding: 10px 12px;
+      }
+
+      #popup-content {
+        height: calc(100% - 40px);
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+
+      #networkCanvas {
+        height: 250px !important;
+      }
+
+      #leakChart {
+        height: 250px !important;
+        min-height: 250px !important;
+      }
+
+      .mobile-menu-toggle {
+        width: 45px;
+        height: 45px;
+        top: 15px;
+        left: 15px;
+      }
+
+      .toggle-container {
+        left: 70px;
+        top: 15px;
+      }
+
+      #guide-button {
+        width: 45px;
+        height: 45px;
+        top: 15px;
+        right: 15px;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Landscape orientation adjustments for mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .mobile-sidebar {
+        width: 320px;
+        left: -320px;
+      }
+      
+      #popup {
+        width: 80vw !important;
+        height: 85vh !important;
+        bottom: 7.5vh !important;
+        right: 10vw !important;
+      }
+      
+      .sidebar-section {
+        margin-bottom: 20px;
       }
     }
   </style>
@@ -415,6 +709,47 @@
     <div class="right-panel" id="viewer"></div>
   </div>
 
+  <!-- Mobile Menu Toggle -->
+  <div class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileSidebar()">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+  </div>
+
+  <!-- Mobile Sidebar -->
+  <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay" onclick="closeMobileSidebar()"></div>
+  <div class="mobile-sidebar" id="mobile-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">메뉴</div>
+      <button class="sidebar-close" onclick="closeMobileSidebar()">✖</button>
+    </div>
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">주요 기능</div>
+      <button class="sidebar-button" onclick="LearningStart(); closeMobileSidebar();">
+        🤖 AI 신경망 학습
+      </button>
+      <button class="sidebar-button" onclick="LeakDetection(); closeMobileSidebar();">
+        🔍 AI 기반 누출 탐지
+      </button>
+      <button class="sidebar-button" onclick="Dispersion(); closeMobileSidebar();">
+        🌊 암모니아 확산 양상
+      </button>
+    </div>
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">누출원 데이터</div>
+      <div class="sidebar-leak-buttons">
+        <button class="sidebar-leak-button" onclick="showLeakData(1); closeMobileSidebar();">Leak #1</button>
+        <button class="sidebar-leak-button" onclick="showLeakData(2); closeMobileSidebar();">Leak #2</button>
+        <button class="sidebar-leak-button" onclick="showLeakData(3); closeMobileSidebar();">Leak #3</button>
+        <button class="sidebar-leak-button" onclick="showLeakData(4); closeMobileSidebar();">Leak #4</button>
+        <button class="sidebar-leak-button" onclick="showLeakData(5); closeMobileSidebar();">Leak #5</button>
+        <button class="sidebar-leak-button" onclick="showLeakData(6); closeMobileSidebar();">Leak #6</button>
+      </div>
+    </div>
+  </div>
+
   <div id="overlay-buttons">
     <button onclick="LearningStart()">🤖 AI 신경망 학습</button>
     <button onclick="LeakDetection()">🔍 AI 기반 누출 탐지</button>
@@ -422,7 +757,7 @@
   </div>
 
   <div id="guide-button" onclick="toggleGuide()" title="사용법 가이드">
-    💡 가이드
+    💡<span class="guide-text"> 가이드</span>
   </div>
 
   <div id="leak-buttons">
@@ -498,6 +833,16 @@
     let networkScale = 1;
     let networkCanvas = null;
     let networkCtx = null;
+
+    // Device detection
+    const isMobileDevice = () => {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+             window.innerWidth <= 768 || 
+             ('ontouchstart' in window);
+    };
+
+    // Mobile sidebar state
+    let sidebarOpen = false;
     
     // Dispersion variables
     let dispersionGroup = new THREE.Group();
@@ -505,6 +850,18 @@
 
     init();
     loadModel('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/model_GE-v1.glb');
+    
+    // Initialize mobile features after page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeMobileFeatures();
+    });
+    
+    // Also initialize if already loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeMobileFeatures);
+    } else {
+      initializeMobileFeatures();
+    }
 
     function init() {
       const container = document.getElementById('viewer');
@@ -728,7 +1085,7 @@
       
       const html = `
         <div style="text-align: center; padding: 10px;">
-          <canvas id="networkCanvas" style="width: 100%; height: 400px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 1px solid #dee2e6; cursor: grab; position: relative;"></canvas>
+          <canvas id="networkCanvas" style="width: 100%; height: 350px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; border: 1px solid #dee2e6; cursor: grab; position: relative;"></canvas>
           <div style="margin-top: 15px; padding: 10px; background: rgba(0, 123, 255, 0.1); border-radius: 8px;">
             <p style="margin: 5px 0; font-size: 1.1em; color: #333; font-weight: 600;">딥러닝 신경망 학습 진행 중...</p>
             <p style="margin: 5px 0; font-size: 0.9em; color: #555;">복잡한 다층 신경망 구조가 학습 데이터를 처리하고 있습니다.</p>
@@ -738,15 +1095,22 @@
       `;
 
       document.getElementById('popup-content').innerHTML = html;
-      popup.style.width = '45vw';
-      popup.style.maxWidth = '500px';
-      popup.style.height = '90vh';
-      popup.style.maxHeight = '800px';
-      popup.style.bottom = 'auto';
-      popup.style.right = 'auto';
-      popup.style.top = '50%';
-      popup.style.left = '50%';
-      popup.style.transform = 'translate(-50%, -50%)';
+      
+      if (isMobileDevice()) {
+        adjustPopupForMobile();
+      } else {
+        popup.style.width = '520px';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '480px';
+        popup.style.maxHeight = '80vh';
+        popup.style.bottom = 'auto';
+        popup.style.right = 'auto';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.background = 'rgba(248, 249, 250, 0.95)';
+        popup.style.backdropFilter = 'blur(10px) saturate(180%)';
+      }
       
       // Show popup with animation
       popup.classList.add('show');
@@ -1239,13 +1603,22 @@
     }
 
     function showChartPopup() {
-      popup.style.width = '450px';
-      popup.style.height = '350px';
-      popup.style.bottom = '20px';
-      popup.style.right = '20px';
-      popup.style.top = 'auto';
-      popup.style.left = 'auto';
-      popup.style.transform = 'none';
+      if (isMobileDevice()) {
+        adjustPopupForMobile();
+      } else {
+        // Smaller popup positioned at bottom-right to not obstruct 3D view
+        popup.style.width = '400px';
+        popup.style.height = '300px';
+        popup.style.top = 'auto';
+        popup.style.left = 'auto';
+        popup.style.bottom = '20px';
+        popup.style.right = '20px';
+        popup.style.transform = 'none';
+        
+        // Add semi-transparent background for better visibility of 3D scene behind
+        popup.style.background = 'rgba(248, 249, 250, 0.92)';
+        popup.style.backdropFilter = 'blur(15px) saturate(180%)';
+      }
       
       // Show popup with animation
       popup.classList.add('show');
@@ -1840,13 +2213,21 @@
       `;
 
       document.getElementById('popup-content').innerHTML = html;
-      popup.style.width = '380px';
-      popup.style.height = '400px';
-      popup.style.bottom = '20px';
-      popup.style.right = '20px';
-      popup.style.top = 'auto';
-      popup.style.left = 'auto';
-      popup.style.transform = 'none';
+      
+      if (isMobileDevice()) {
+        adjustPopupForMobile();
+      } else {
+        // Position sensor info popup at bottom-right like chart popups
+        popup.style.width = '380px';
+        popup.style.height = '320px';
+        popup.style.top = 'auto';
+        popup.style.left = 'auto';
+        popup.style.bottom = '20px';
+        popup.style.right = '20px';
+        popup.style.transform = 'none';
+        popup.style.background = 'rgba(248, 249, 250, 0.92)';
+        popup.style.backdropFilter = 'blur(15px) saturate(180%)';
+      }
       
       // Show popup with animation
       popup.classList.add('show');
@@ -1910,6 +2291,7 @@
     function setupEventListeners() {
       // Draggable popup
       let isDragging = false, offsetX = 0, offsetY = 0;
+      let currentX = 0, currentY = 0; // Track current position for centered popup
 
       popupHeader.addEventListener('mousedown', (e) => {
         e.preventDefault(); // Prevent text selection
@@ -1917,22 +2299,37 @@
         const rect = popup.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
+        
+        // Get current position from transform or calculate from rect
+        const computedStyle = window.getComputedStyle(popup);
+        const transform = computedStyle.transform;
+        if (transform !== 'none' && transform.includes('matrix')) {
+          const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+          currentX = parseFloat(matrix[4]);
+          currentY = parseFloat(matrix[5]);
+        } else {
+          currentX = rect.left + rect.width / 2 - window.innerWidth / 2;
+          currentY = rect.top + rect.height / 2 - window.innerHeight / 2;
+        }
+        
         document.body.style.userSelect = 'none'; // Prevent text selection during drag
       });
 
       document.addEventListener('mousemove', (e) => {
         if (isDragging) {
           e.preventDefault(); // Prevent text selection
-          const newLeft = e.clientX - offsetX;
-          const newTop = e.clientY - offsetY;
           
-          // Constrain popup to viewport
-          const maxLeft = window.innerWidth - popup.offsetWidth;
-          const maxTop = window.innerHeight - popup.offsetHeight;
+          const deltaX = e.clientX - offsetX - currentX;
+          const deltaY = e.clientY - offsetY - currentY;
           
-          popup.style.left = Math.max(0, Math.min(newLeft, maxLeft)) + 'px';
-          popup.style.top = Math.max(0, Math.min(newTop, maxTop)) + 'px';
-          popup.style.transform = 'none';
+          // Update current position
+          currentX = e.clientX - offsetX;
+          currentY = e.clientY - offsetY;
+          
+          // Apply transform to maintain center-based positioning
+          popup.style.left = '50%';
+          popup.style.top = '50%';
+          popup.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px))`;
         }
       });
 
@@ -1943,10 +2340,14 @@
         }
       });
 
-      // ESC key support for closing popups
+      // ESC key support for closing popups and sidebar
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && popup.classList.contains('show')) {
-          closePopup();
+        if (e.key === 'Escape') {
+          if (sidebarOpen) {
+            closeMobileSidebar();
+          } else if (popup.classList.contains('show')) {
+            closePopup();
+          }
         }
       });
 
@@ -2037,6 +2438,153 @@
       showGuide();
     }
 
+    // Mobile sidebar functions
+    function toggleMobileSidebar() {
+      if (sidebarOpen) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    }
+
+    function openMobileSidebar() {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const overlay = document.getElementById('mobile-sidebar-overlay');
+      const toggle = document.getElementById('mobile-menu-toggle');
+      
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+      toggle.classList.add('active');
+      sidebarOpen = true;
+      
+      // Prevent body scrolling when sidebar is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSidebar() {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const overlay = document.getElementById('mobile-sidebar-overlay');
+      const toggle = document.getElementById('mobile-menu-toggle');
+      
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      toggle.classList.remove('active');
+      sidebarOpen = false;
+      
+      // Restore body scrolling
+      document.body.style.overflow = '';
+    }
+
+    // Enhanced popup positioning for mobile
+    function adjustPopupForMobile() {
+      if (!isMobileDevice()) return;
+      
+      const popup = document.getElementById('popup');
+      
+      // Mobile-specific popup adjustments with center positioning
+      popup.style.width = '95vw';
+      popup.style.maxWidth = '95vw';
+      popup.style.height = '80vh';
+      popup.style.maxHeight = '80vh';
+      popup.style.top = '50%';
+      popup.style.left = '50%';
+      popup.style.transform = 'translate(-50%, -50%)';
+      popup.style.bottom = 'auto';
+      popup.style.right = 'auto';
+      
+      // Enhanced acrylic transparency for mobile to show background
+      popup.style.background = 'rgba(248, 249, 250, 0.85)';
+      popup.style.backdropFilter = 'blur(20px) saturate(180%)';
+      popup.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
+      
+      // For very small screens (phones in portrait)
+      if (window.innerWidth <= 480) {
+        popup.style.width = '98vw';
+        popup.style.height = '85vh';
+      }
+      
+      // For landscape orientation on mobile
+      if (window.innerWidth > window.innerHeight && window.innerWidth <= 1024) {
+        popup.style.width = '90vw';
+        popup.style.height = '90vh';
+      }
+    }
+
+    // Initialize mobile-specific features
+    function initializeMobileFeatures() {
+      if (isMobileDevice()) {
+        // Add mobile class to body for additional styling
+        document.body.classList.add('mobile-device');
+        
+        // Improve viewport settings for mobile
+        let viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes');
+        }
+        
+        // Close sidebar when clicking outside
+        document.addEventListener('touchstart', (e) => {
+          const sidebar = document.getElementById('mobile-sidebar');
+          const toggle = document.getElementById('mobile-menu-toggle');
+          
+          if (sidebarOpen && 
+              !sidebar.contains(e.target) && 
+              !toggle.contains(e.target)) {
+            closeMobileSidebar();
+          }
+        });
+        
+        // Enhanced touch handling for 3D interactions
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isTouch3D = false;
+        
+        document.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+          
+          // Check if touch is on 3D viewer
+          isTouch3D = e.target.closest('#viewer') !== null;
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+          if (isTouch3D && e.touches.length <= 2) {
+            const touchY = e.touches[0].clientY;
+            const touchX = e.touches[0].clientX;
+            const deltaY = Math.abs(touchStartY - touchY);
+            const deltaX = Math.abs(touchStartX - touchX);
+            
+            // Prevent page scroll when interacting with 3D scene
+            if (deltaY > 10 || deltaX > 10) {
+              e.preventDefault();
+            }
+          }
+        }, { passive: false });
+        
+        // Add haptic feedback for button interactions on mobile (if supported)
+        const addHapticFeedback = (element) => {
+          element.addEventListener('touchstart', () => {
+            if (navigator.vibrate) {
+              navigator.vibrate(10); // Short vibration
+            }
+          });
+        };
+        
+        // Apply haptic feedback to interactive elements
+        document.querySelectorAll('.sidebar-button, .sidebar-leak-button, .mobile-menu-toggle').forEach(addHapticFeedback);
+        
+        // Optimize renderer for mobile performance
+        if (renderer) {
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+          renderer.antialias = window.devicePixelRatio === 1;
+        }
+        
+        console.log('Mobile features initialized');
+      } else {
+        console.log('Desktop mode detected');
+      }
+    }
+
     // User-friendly guide system with comprehensive tutorial
     function showGuide() {
       popupLocked = false;
@@ -2079,11 +2627,21 @@
             
             <div style="display: grid; gap: 10px;">
               <div style="background: #fff3cd; padding: 10px; border-radius: 8px; border-left: 4px solid #ffc107;">
-                <h4 style="margin: 0 0 6px 0; color: #856404; font-size: 0.9em; font-weight: 600;">3D 뷰어 조작</h4>
+                <h4 style="margin: 0 0 6px 0; color: #856404; font-size: 0.9em; font-weight: 600;">데스크톱 조작</h4>
                 <ul style="margin: 6px 0 0 0; padding-left: 16px; font-size: 0.8em; color: #666;">
                   <li>마우스 좌클릭 + 드래그: 시점 회전</li>
                   <li>마우스 휠: 확대/축소</li>
                   <li>마우스 우클릭 + 드래그: 카메라 이동</li>
+                </ul>
+              </div>
+              
+              <div style="background: #d1ecf1; padding: 10px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                <h4 style="margin: 0 0 6px 0; color: #0c5460; font-size: 0.9em; font-weight: 600;">모바일 조작</h4>
+                <ul style="margin: 6px 0 0 0; padding-left: 16px; font-size: 0.8em; color: #666;">
+                  <li>햄버거 메뉴(☰): 사이드바 메뉴 열기</li>
+                  <li>터치 + 드래그: 시점 회전</li>
+                  <li>핀치 줌: 확대/축소</li>
+                  <li>두 손가락 드래그: 카메라 이동</li>
                 </ul>
               </div>
               
@@ -2139,11 +2697,13 @@
             
             <div style="background: #fff3cd; padding: 12px; border-radius: 8px; border-left: 4px solid #fd7e14;">
               <ul style="margin: 0; padding-left: 16px; font-size: 0.85em; color: #856404;">
-                <li><strong>ESC 키:</strong> 열려있는 팝업 창을 빠르게 닫습니다</li>
+                <li><strong>ESC 키:</strong> 열려있는 팝업 창이나 사이드바를 빠르게 닫습니다</li>
                 <li><strong>팝업 드래그:</strong> 팝업 상단 바를 드래그하여 위치 조정 가능</li>
                 <li><strong>신경망 뷰:</strong> 휠로 확대/축소, 드래그로 이동, Reset View 버튼으로 초기화</li>
+                <li><strong>모바일 메뉴:</strong> 좌상단 햄버거 메뉴(☰)로 모든 기능에 접근 가능</li>
                 <li><strong>동시 실행:</strong> 여러 기능을 동시에 실행하면 이전 작업이 자동으로 정리됩니다</li>
-                <li><strong>반응형 디자인:</strong> 모바일 및 태블릿에서도 최적화된 인터페이스</li>
+                <li><strong>반응형 디자인:</strong> 모바일 및 태블릿에서 최적화된 인터페이스 제공</li>
+                <li><strong>터치 제스처:</strong> 모바일에서 자연스러운 터치 조작 지원</li>
               </ul>
             </div>
           </div>
@@ -2154,15 +2714,19 @@
       document.getElementById('popup-content').innerHTML = html;
       
       // Set popup size for guide content
-      popup.style.width = '500px';
-      popup.style.maxWidth = '90vw';
-      popup.style.height = '600px';
-      popup.style.maxHeight = '85vh';
-      popup.style.bottom = '20px';
-      popup.style.right = '20px';
-      popup.style.top = 'auto';
-      popup.style.left = 'auto';
-      popup.style.transform = 'none';
+      if (isMobileDevice()) {
+        adjustPopupForMobile();
+      } else {
+        popup.style.width = '500px';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '600px';
+        popup.style.maxHeight = '80vh';
+        popup.style.bottom = 'auto';
+        popup.style.right = 'auto';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+      }
       
       // Show popup with animation
       popup.classList.add('show');
