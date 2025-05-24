@@ -65,40 +65,93 @@
       transform: translateY(-1px);
     }
 
-    #leak-buttons {
+    /* Training Dataset Button */
+    #training-dataset-button {
       position: absolute;
-      top: 220px; /* Positioned below overlay buttons */
+      top: 180px; /* Positioned below overlay buttons */
       left: 20px; /* Aligned with overlay buttons */
+      z-index: 10000;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #6f42c1;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #6f42c1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      min-width: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #training-dataset-button:hover {
+      background: rgba(111, 66, 193, 0.1);
+      box-shadow: 0 0 12px rgba(111, 66, 193, 0.2);
+      transform: translateY(-1px);
+    }
+
+    #training-dataset-button.expanded .expand-arrow {
+      transform: rotate(180deg);
+    }
+
+    .expand-arrow {
+      transition: transform 0.3s ease;
+      margin-left: 8px;
+    }
+
+    /* Training Leak Buttons */
+    #training-leak-buttons {
+      position: absolute;
+      top: 225px; /* Positioned below training dataset button */
+      left: 20px; /* Aligned with training dataset button */
       z-index: 10000;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px; /* Reduced gap to make it more compact */
       max-width: 250px;
+      opacity: 1;
+      visibility: visible;
+      transition: all 0.3s ease;
     }
 
-    #leak-buttons button {
-      padding: 8px 12px;
-      font-size: 0.8rem;
+    #training-leak-buttons.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+    }
+
+    #training-leak-buttons button {
+      padding: 6px 10px; /* Reduced padding for more compact layout */
+      font-size: 0.75rem; /* Slightly smaller font */
       font-weight: 500;
-      color: #dc3545;
+      color: #6f42c1;
       background: rgba(255, 255, 255, 0.9);
-      border: 1px solid #dc3545;
+      border: 1px solid #6f42c1;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
-    #leak-buttons button:hover {
-      background: rgba(220, 53, 69, 0.1);
-      box-shadow: 0 0 10px rgba(220, 53, 69, 0.2);
+    #training-leak-buttons button:hover {
+      background: rgba(111, 66, 193, 0.1);
+      box-shadow: 0 0 10px rgba(111, 66, 193, 0.2);
       transform: translateY(-1px);
+    }
+
+    .hidden {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: translateY(-10px) !important;
     }
 
     /* Modern Toggle Switch */
     .toggle-container {
       position: absolute;
-      top: 310px; /* Positioned below leak buttons */
-      left: 20px; /* Aligned with overlay buttons */
+      top: 20px; /* Move to top-right corner */
+      right: 20px; /* Position on the right side */
       z-index: 10000;
       display: flex;
       align-items: center;
@@ -108,6 +161,7 @@
       border-radius: 25px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(10px);
+      height: 40px; /* Set consistent height */
     }
 
     .toggle-label {
@@ -195,10 +249,10 @@
       overflow: hidden;
       box-sizing: border-box;
       
-      /* Animation properties */
+      /* Animation properties - Reduced intensity for smoother dragging */
       opacity: 0;
       visibility: hidden;
-      transition: all 0.5s cubic-bezier(0.86,0,0.07,1);
+      transition: all 0.2s ease;
     }
 
     #popup.show {
@@ -338,6 +392,38 @@
       border: 1px solid rgba(0, 123, 255, 0.3);
       z-index: 1;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .sensor-label.fade-in {
+      animation: fadeInLabel 0.2s ease forwards;
+    }
+
+    .sensor-label.fade-out {
+      animation: fadeOutLabel 0.3s ease-in-out forwards;
+    }
+
+    /* Keyframe animations for sensor labels */
+    @keyframes fadeInLabel {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-160%) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-160%) scale(1);
+      }
+    }
+
+    @keyframes fadeOutLabel {
+      0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-160%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-160%) scale(0.8);
+      }
     }
 
     /* Mobile Sidebar */
@@ -351,7 +437,7 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: left 0.25s ease-out;
       z-index: 15000;
       padding: 20px;
       box-sizing: border-box;
@@ -494,6 +580,17 @@
       transform: translateY(-1px);
     }
 
+    /* Training leak buttons in sidebar */
+    .training-leak-button {
+      color: #6f42c1 !important;
+      border-color: #6f42c1 !important;
+    }
+
+    .training-leak-button:hover, .training-leak-button:active {
+      background: rgba(111, 66, 193, 0.1) !important;
+      transform: translateY(-1px);
+    }
+
     /* Hamburger Menu */
     .mobile-menu-toggle {
       position: fixed;
@@ -545,7 +642,8 @@
     @media (max-width: 768px) {
       /* Hide desktop buttons and show mobile menu */
       #overlay-buttons,
-      #leak-buttons {
+      #training-dataset-button,
+      #training-leak-buttons {
         display: none !important;
       }
 
@@ -555,7 +653,9 @@
 
       .toggle-container {
         top: 20px;
-        left: 80px; /* Position after hamburger menu */
+        right: 80px; /* Position to the left of guide button on mobile */
+        height: 50px; /* Match hamburger button height */
+        align-items: center;
       }
 
       #guide-button {
@@ -572,17 +672,32 @@
         display: none;
       }
 
-      /* Enhanced mobile popup styles */
-      #popup {
-        width: 95vw !important;
-        height: 70vh !important;
-        max-width: 95vw !important;
-        max-height: 70vh !important;
-        bottom: 2.5vw !important;
-        right: 2.5vw !important;
+      /* Enhanced mobile popup styles - Different sizes for different popup types */
+      #popup:not(.guide-popup) {
+        width: 90vw !important;
+        height: 35vh !important; /* Reduced to 1/3 of screen height for non-guide popups */
+        max-width: 90vw !important;
+        max-height: 35vh !important;
+        bottom: 5vw !important;
+        right: 5vw !important;
         top: auto !important;
         left: auto !important;
         transform: none !important;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
+      /* Guide popup gets larger size on mobile */
+      #popup.guide-popup {
+        width: 90vw !important;
+        height: 67vh !important; /* 2/3 of screen height for guide popup */
+        max-width: 90vw !important;
+        max-height: 67vh !important;
+        top: 50% !important;
+        left: 50% !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
         border-radius: 16px;
         font-size: 14px;
       }
@@ -601,13 +716,13 @@
 
       /* Neural network canvas mobile optimization */
       #networkCanvas {
-        height: 300px !important;
+        height: 180px !important; /* Reduced for smaller popup */
       }
 
       /* Chart optimization for mobile */
       #leakChart {
-        height: 300px !important;
-        min-height: 300px !important;
+        height: 180px !important; /* Reduced for smaller popup */
+        min-height: 180px !important;
       }
 
       .sensor-label {
@@ -632,10 +747,10 @@
       }
 
       #popup {
-        width: 98vw !important;
-        height: 75vh !important;
-        bottom: 1vw !important;
-        right: 1vw !important;
+        width: 95vw !important;
+        height: 30vh !important; /* Even smaller for very small screens */
+        bottom: 2.5vw !important;
+        right: 2.5vw !important;
         border-radius: 12px;
         font-size: 13px;
       }
@@ -653,12 +768,12 @@
       }
 
       #networkCanvas {
-        height: 250px !important;
+        height: 150px !important; /* Even smaller for very small screens */
       }
 
       #leakChart {
-        height: 250px !important;
-        min-height: 250px !important;
+        height: 150px !important; /* Even smaller for very small screens */
+        min-height: 150px !important;
       }
 
       .mobile-menu-toggle {
@@ -669,8 +784,10 @@
       }
 
       .toggle-container {
-        left: 70px;
+        right: 70px; /* Better alignment for smaller screens - position to the left of guide button */
         top: 15px;
+        height: 45px; /* Match hamburger button height */
+        align-items: center;
       }
 
       #guide-button {
@@ -738,14 +855,14 @@
     </div>
     
     <div class="sidebar-section">
-      <div class="sidebar-section-title">누출원 데이터</div>
+      <div class="sidebar-section-title">훈련 데이터셋</div>
       <div class="sidebar-leak-buttons">
-        <button class="sidebar-leak-button" onclick="showLeakData(1); closeMobileSidebar();">Leak #1</button>
-        <button class="sidebar-leak-button" onclick="showLeakData(2); closeMobileSidebar();">Leak #2</button>
-        <button class="sidebar-leak-button" onclick="showLeakData(3); closeMobileSidebar();">Leak #3</button>
-        <button class="sidebar-leak-button" onclick="showLeakData(4); closeMobileSidebar();">Leak #4</button>
-        <button class="sidebar-leak-button" onclick="showLeakData(5); closeMobileSidebar();">Leak #5</button>
-        <button class="sidebar-leak-button" onclick="showLeakData(6); closeMobileSidebar();">Leak #6</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(1); closeMobileSidebar();">Training Leak #1</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(2); closeMobileSidebar();">Training Leak #2</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(3); closeMobileSidebar();">Training Leak #3</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(4); closeMobileSidebar();">Training Leak #4</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(5); closeMobileSidebar();">Training Leak #5</button>
+        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(6); closeMobileSidebar();">Training Leak #6</button>
       </div>
     </div>
   </div>
@@ -756,21 +873,25 @@
     <button onclick="Dispersion()">🌊 암모니아 확산 양상</button>
   </div>
 
+  <button id="training-dataset-button" onclick="toggleTrainingDataset()" title="훈련 데이터셋">
+    📊 Training Dataset <span class="expand-arrow">▲</span>
+  </button>
+  
+  <div id="training-leak-buttons" class="hidden">
+    <button onclick="showLeakData(1)">Training Leak #1</button>
+    <button onclick="showLeakData(2)">Training Leak #2</button>
+    <button onclick="showLeakData(3)">Training Leak #3</button>
+    <button onclick="showLeakData(4)">Training Leak #4</button>
+    <button onclick="showLeakData(5)">Training Leak #5</button>
+    <button onclick="showLeakData(6)">Training Leak #6</button>
+  </div>
+
   <div id="guide-button" onclick="toggleGuide()" title="사용법 가이드">
     💡<span class="guide-text"> 가이드</span>
   </div>
 
-  <div id="leak-buttons">
-    <button onclick="showLeakData(1)">Leak #1</button>
-    <button onclick="showLeakData(2)">Leak #2</button>
-    <button onclick="showLeakData(3)">Leak #3</button>
-    <button onclick="showLeakData(4)">Leak #4</button>
-    <button onclick="showLeakData(5)">Leak #5</button>
-    <button onclick="showLeakData(6)">Leak #6</button>
-  </div>
-
   <div class="toggle-container">
-    <span class="toggle-label">Labels</span>
+    <span class="toggle-label">Sensor Labels</span>
     <div class="toggle-switch active" id="toggle-switch" onclick="toggleLabels()">
       <div class="toggle-slider"></div>
     </div>
@@ -875,7 +996,7 @@
       const aspect = container.clientWidth / container.clientHeight;
       const dist = 15;
       camera = new THREE.OrthographicCamera(-dist * aspect, dist * aspect, dist, -dist, 0.1, 1000);
-      camera.position.set(20, 0, 0); // Changed from (20, 20, 20) to view from yz plane
+      camera.position.set(15, 10, 15); // Changed viewport direction for better mobile viewing angle
       camera.lookAt(0, 0, 0);
 
       controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -885,7 +1006,7 @@
       controls.screenSpacePanning = false;
       controls.minDistance = 5;
       controls.maxDistance = 100;
-      controls.maxPolarAngle = Math.PI / 1.5;
+      // Remove maxPolarAngle limit to allow full rotation
       controls.update();
 
       loader = new THREE.GLTFLoader();
@@ -1036,11 +1157,18 @@
     function updateSensorLabels() {
       sensorLabels.forEach(({mesh, div}) => {
         if (!labelsVisible) {
-          div.style.display = 'none';
+          // Don't modify display if fade-out animation is in progress
+          if (!div.classList.contains('fade-out')) {
+            div.style.display = 'none';
+          }
           return;
         }
 
-        div.style.display = 'block';
+        // Ensure label is visible when labels are enabled
+        if (labelsVisible && div.style.display === 'none') {
+          div.style.display = 'block';
+        }
+
         const vector = mesh.position.clone();
         vector.project(camera);
 
@@ -1050,9 +1178,23 @@
         div.style.left = x + 'px';
         div.style.top = y + 'px';
 
-        // Hide labels that are behind the camera or too far
-        if (vector.z > 1 || vector.z < -1) {
-          div.style.display = 'none';
+        // Enhanced visibility check for mobile compatibility
+        // Use more lenient bounds and distance calculation
+        const distance = camera.position.distanceTo(mesh.position);
+        const isVisible = vector.z > -1 && vector.z < 1 && 
+                         x >= -50 && x <= window.innerWidth + 50 && 
+                         y >= -50 && y <= window.innerHeight + 50 &&
+                         distance < controls.maxDistance * 1.2; // More lenient distance check
+
+        if (!isVisible) {
+          div.style.opacity = '0';
+          div.style.pointerEvents = 'none'; // Disable interactions when not visible
+        } else if (labelsVisible) {
+          // Restore opacity and interactions for visible labels (unless fade-out is active)
+          if (!div.classList.contains('fade-out')) {
+            div.style.opacity = '';
+            div.style.pointerEvents = 'auto'; // Re-enable interactions
+          }
         }
       });
     }
@@ -1060,10 +1202,31 @@
     function toggleLabels() {
       labelsVisible = !labelsVisible;
       const toggleSwitch = document.getElementById('toggle-switch');
+      
       if (labelsVisible) {
         toggleSwitch.classList.add('active');
+        // Show labels with fade-in animation
+        sensorLabels.forEach(({div}) => {
+          div.classList.remove('fade-out');
+          div.style.display = 'block';
+          // Use requestAnimationFrame to ensure the display change is applied before adding fade-in class
+          requestAnimationFrame(() => {
+            div.classList.add('fade-in');
+          });
+        });
       } else {
         toggleSwitch.classList.remove('active');
+        // Hide labels with fade-out animation
+        sensorLabels.forEach(({div}) => {
+          div.classList.remove('fade-in');
+          div.classList.add('fade-out');
+          // Hide after animation completes
+          setTimeout(() => {
+            if (!labelsVisible) {
+              div.style.display = 'none';
+            }
+          }, 300); // Match CSS transition duration
+        });
       }
       updateSensorLabels();
     }
@@ -1817,6 +1980,11 @@
         return;
       }
       
+      // Close any existing popup first
+      if (popup.classList.contains('show')) {
+        closePopup();
+      }
+      
       // Reset other toggles
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates.dispersion = true;
@@ -1922,8 +2090,8 @@
       // Wind field for realistic flow
       const windField = {
         x: 0.01,
-        y: -0.005, // slight downward draft
-        z: 0.003
+        y: -0.01, // slight downward draft
+        z: 0.03
       };
 
       let lastEmissionTime = 0;
@@ -2215,7 +2383,7 @@
       document.getElementById('popup-content').innerHTML = html;
       
       if (isMobileDevice()) {
-        adjustPopupForMobile();
+        adjustPopupForMobile('sensor');
       } else {
         // Position sensor info popup at bottom-right like chart popups
         popup.style.width = '380px';
@@ -2289,54 +2457,120 @@
     }
 
     function setupEventListeners() {
-      // Draggable popup
-      let isDragging = false, offsetX = 0, offsetY = 0;
-      let currentX = 0, currentY = 0; // Track current position for centered popup
+      // Draggable popup (Desktop and Mobile) - Fixed version
+      let isDragging = false;
+      let isTouchDragging = false;
+      let startX = 0, startY = 0;
+      let initialTranslateX = 0, initialTranslateY = 0;
 
-      popupHeader.addEventListener('mousedown', (e) => {
-        e.preventDefault(); // Prevent text selection
-        isDragging = true;
-        const rect = popup.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-        
-        // Get current position from transform or calculate from rect
+      // Helper function to get current translate values
+      function getCurrentTranslate() {
         const computedStyle = window.getComputedStyle(popup);
         const transform = computedStyle.transform;
-        if (transform !== 'none' && transform.includes('matrix')) {
-          const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
-          currentX = parseFloat(matrix[4]);
-          currentY = parseFloat(matrix[5]);
-        } else {
-          currentX = rect.left + rect.width / 2 - window.innerWidth / 2;
-          currentY = rect.top + rect.height / 2 - window.innerHeight / 2;
+        
+        if (transform === 'none' || !transform.includes('matrix')) {
+          return { x: 0, y: 0 };
         }
         
-        document.body.style.userSelect = 'none'; // Prevent text selection during drag
+        const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+        return {
+          x: parseFloat(matrix[4]) || 0,
+          y: parseFloat(matrix[5]) || 0
+        };
+      }
+
+      // Desktop mouse events
+      popupHeader.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        
+        // Get starting mouse position
+        startX = e.clientX;
+        startY = e.clientY;
+        
+        // Get current translate values
+        const currentTranslate = getCurrentTranslate();
+        initialTranslateX = currentTranslate.x;
+        initialTranslateY = currentTranslate.y;
+        
+        document.body.style.userSelect = 'none';
+        popup.style.cursor = 'grabbing';
       });
 
       document.addEventListener('mousemove', (e) => {
         if (isDragging) {
-          e.preventDefault(); // Prevent text selection
+          e.preventDefault();
           
-          const deltaX = e.clientX - offsetX - currentX;
-          const deltaY = e.clientY - offsetY - currentY;
+          // Calculate the movement delta
+          const deltaX = e.clientX - startX;
+          const deltaY = e.clientY - startY;
           
-          // Update current position
-          currentX = e.clientX - offsetX;
-          currentY = e.clientY - offsetY;
+          // Apply the movement to the initial position
+          const newX = initialTranslateX + deltaX;
+          const newY = initialTranslateY + deltaY;
           
-          // Apply transform to maintain center-based positioning
+          // Update popup position
           popup.style.left = '50%';
           popup.style.top = '50%';
-          popup.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px))`;
+          popup.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
         }
       });
 
       document.addEventListener('mouseup', () => {
         if (isDragging) {
           isDragging = false;
-          document.body.style.userSelect = ''; // Restore text selection
+          document.body.style.userSelect = '';
+          popup.style.cursor = 'auto';
+        }
+      });
+
+      // Mobile touch events
+      popupHeader.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+          isTouchDragging = true;
+          const touch = e.touches[0];
+          
+          // Get starting touch position
+          startX = touch.clientX;
+          startY = touch.clientY;
+          
+          // Get current translate values
+          const currentTranslate = getCurrentTranslate();
+          initialTranslateX = currentTranslate.x;
+          initialTranslateY = currentTranslate.y;
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchmove', (e) => {
+        if (isTouchDragging && e.touches.length === 1) {
+          e.preventDefault();
+          const touch = e.touches[0];
+          
+          // Calculate the movement delta
+          const deltaX = touch.clientX - startX;
+          const deltaY = touch.clientY - startY;
+          
+          // Apply the movement to the initial position
+          const newX = initialTranslateX + deltaX;
+          const newY = initialTranslateY + deltaY;
+          
+          // Update popup position
+          popup.style.left = '50%';
+          popup.style.top = '50%';
+          popup.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchend', () => {
+        if (isTouchDragging) {
+          isTouchDragging = false;
+        }
+      });
+
+      document.addEventListener('touchcancel', () => {
+        if (isTouchDragging) {
+          isTouchDragging = false;
         }
       });
 
@@ -2438,6 +2672,25 @@
       showGuide();
     }
 
+    // Toggle training dataset functionality
+    function toggleTrainingDataset() {
+      const button = document.getElementById('training-dataset-button');
+      const container = document.getElementById('training-leak-buttons');
+      const arrow = button.querySelector('.expand-arrow');
+      
+      if (container.classList.contains('hidden')) {
+        // Show training leak buttons
+        container.classList.remove('hidden');
+        button.classList.add('expanded');
+        arrow.textContent = '▼'; // ▼ for expanded state
+      } else {
+        // Hide training leak buttons
+        container.classList.add('hidden');
+        button.classList.remove('expanded');
+        arrow.textContent = '▲'; // ▲ for collapsed state
+      }
+    }
+
     // Mobile sidebar functions
     function toggleMobileSidebar() {
       if (sidebarOpen) {
@@ -2476,37 +2729,99 @@
     }
 
     // Enhanced popup positioning for mobile
-    function adjustPopupForMobile() {
+    function adjustPopupForMobile(popupType = 'default') {
       if (!isMobileDevice()) return;
       
       const popup = document.getElementById('popup');
-      
-      // Mobile-specific popup adjustments with center positioning
-      popup.style.width = '95vw';
-      popup.style.maxWidth = '95vw';
-      popup.style.height = '80vh';
-      popup.style.maxHeight = '80vh';
-      popup.style.top = '50%';
-      popup.style.left = '50%';
-      popup.style.transform = 'translate(-50%, -50%)';
-      popup.style.bottom = 'auto';
-      popup.style.right = 'auto';
       
       // Enhanced acrylic transparency for mobile to show background
       popup.style.background = 'rgba(248, 249, 250, 0.85)';
       popup.style.backdropFilter = 'blur(20px) saturate(180%)';
       popup.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
       
-      // For very small screens (phones in portrait)
-      if (window.innerWidth <= 480) {
-        popup.style.width = '98vw';
-        popup.style.height = '85vh';
+      // Remove any existing popup type classes
+      popup.classList.remove('guide-popup', 'sensor-popup');
+      
+      // Apply different styles based on popup type
+      if (popupType === 'guide') {
+        // Add guide-popup class for CSS styling
+        popup.classList.add('guide-popup');
+        
+        // These styles will be applied by CSS, but keeping for fallback
+        popup.style.width = '90vw';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '67vh'; // 2/3 of screen height
+        popup.style.maxHeight = '67vh';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.bottom = 'auto';
+        popup.style.right = 'auto';
+        
+        // For very small screens
+        if (window.innerWidth <= 480) {
+          popup.style.width = '95vw';
+          popup.style.height = '70vh';
+        }
+        
+      } else if (popupType === 'sensor') {
+        // Add sensor-popup class for CSS styling
+        popup.classList.add('sensor-popup');
+        popup.style.width = '90vw';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '50vh'; // 1/2 of screen
+        popup.style.maxHeight = '50vh';
+        popup.style.top = 'auto';
+        popup.style.left = 'auto';
+        popup.style.bottom = '5vw';
+        popup.style.right = '5vw';
+        popup.style.transform = 'none';
+        
+        // For very small screens
+        if (window.innerWidth <= 480) {
+          popup.style.width = '95vw';
+          popup.style.height = '45vh';
+          popup.style.bottom = '2.5vw';
+          popup.style.right = '2.5vw';
+        }
+        
+      } else {
+        // Default popup (charts) - 1/3 of screen, bottom positioned
+        popup.style.width = '90vw';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '35vh'; // Reduced to 1/3 of screen
+        popup.style.maxHeight = '35vh';
+        popup.style.top = 'auto';
+        popup.style.left = 'auto';
+        popup.style.bottom = '5vw';
+        popup.style.right = '5vw';
+        popup.style.transform = 'none';
+        
+        // For very small screens (phones in portrait)
+        if (window.innerWidth <= 480) {
+          popup.style.width = '95vw';
+          popup.style.height = '30vh'; // Even smaller
+          popup.style.bottom = '2.5vw';
+          popup.style.right = '2.5vw';
+        }
       }
       
       // For landscape orientation on mobile
       if (window.innerWidth > window.innerHeight && window.innerWidth <= 1024) {
-        popup.style.width = '90vw';
-        popup.style.height = '90vh';
+        if (popupType === 'guide') {
+          popup.style.width = '80vw';
+          popup.style.height = '75vh';
+        } else if (popupType === 'sensor') {
+          popup.style.width = '70vw';
+          popup.style.height = '55vh';
+          popup.style.bottom = '5vh';
+          popup.style.right = '5vw';
+        } else {
+          popup.style.width = '60vw'; // Smaller width in landscape
+          popup.style.height = '40vh';
+          popup.style.bottom = '5vh';
+          popup.style.right = '5vw';
+        }
       }
     }
 
@@ -2570,8 +2885,25 @@
           });
         };
         
-        // Apply haptic feedback to interactive elements
-        document.querySelectorAll('.sidebar-button, .sidebar-leak-button, .mobile-menu-toggle').forEach(addHapticFeedback);
+        // Apply haptic feedback to all interactive elements
+        document.querySelectorAll(`
+          .sidebar-button, 
+          .sidebar-leak-button, 
+          .mobile-menu-toggle,
+          #overlay-buttons button,
+          #training-dataset-button,
+          #training-leak-buttons button,
+          #guide-button,
+          .toggle-switch,
+          #popup-header button,
+          .network-controls button
+        `).forEach(addHapticFeedback);
+        
+        // Also add haptic feedback to toggle switch
+        const toggleSwitch = document.getElementById('toggle-switch');
+        if (toggleSwitch) {
+          addHapticFeedback(toggleSwitch);
+        }
         
         // Optimize renderer for mobile performance
         if (renderer) {
@@ -2715,7 +3047,7 @@
       
       // Set popup size for guide content
       if (isMobileDevice()) {
-        adjustPopupForMobile();
+        adjustPopupForMobile('guide');
       } else {
         popup.style.width = '500px';
         popup.style.maxWidth = '90vw';
