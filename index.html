@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>AI 누출원 탐지 시스템</title>
   <style>
     body {
@@ -423,7 +423,7 @@
     #closeButton:active {
       background: rgba(0, 123, 255, 0.2);
       transform: scale(0.95);
-    }
+    } 
 
     /* Neural network animation canvas */
     #networkCanvas {
@@ -779,13 +779,15 @@
       }
 
       .toggle-container {
-        bottom: 20px; /* Keep at bottom right for mobile */
-        right: 20px;
+        bottom: 70px; /* Increased margin for mobile browser UI */
+        right: 15px;
         left: auto;
         top: auto;
         height: 50px; /* Match hamburger button height */
         align-items: center;
         z-index: 15000; /* Higher than mobile menu */
+        /* Ensure visibility above mobile browser UI */
+        margin-bottom: env(safe-area-inset-bottom, 0px);
       }
 
       #guide-button {
@@ -978,12 +980,14 @@
       }
 
       .toggle-container {
-        bottom: 15px; /* Keep at bottom right for very small screens too */
+        bottom: 70px; /* Increased margin for very small screens */
         right: 15px;
         left: auto;
         top: auto;
         height: 45px; /* Match hamburger button height */
         align-items: center;
+        /* Ensure visibility above mobile browser UI */
+        margin-bottom: env(safe-area-inset-bottom, 0px);
       }
 
       #guide-button {
