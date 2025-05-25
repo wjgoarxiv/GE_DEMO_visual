@@ -3,18 +3,47 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI 누출원 탐지 시스템</title>
   <style>
     body {
       margin: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       overflow: hidden;
-      background-color: #f0f2f5;
+      background: #f8f9fa;
       color: #333333;
       position: relative;
       width: 100vw;
       height: 100vh;
+    }
+
+    /* Project Title Styles - Simple Text Title */
+    .project-title {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10001;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-align: center;
+      white-space: nowrap;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      transition: opacity 0.3s ease;
+      pointer-events: none; /* Make it non-interactive */
+    }
+
+    .project-title-main {
+      color: #007bff;
+      font-weight: 800;
+    }
+
+    .project-title:hover {
+      opacity: 0.8;
     }
 
     .container {
@@ -34,19 +63,19 @@
       height: 100%;
     }
 
-    /* 훈련 데이터셋 버튼 */
+    /* 훈련 데이터셋 버튼 - Original Clean Design */
     #training-dataset-button {
       position: absolute;
-      top: 20px; /* Moved to top */
-      left: 20px; /* Aligned with other buttons */
+      top: 20px;
+      left: 20px;
       z-index: 10000;
-      padding: 10px 15px;
+      padding: 12px 16px;
       font-size: 0.9rem;
-      font-weight: 500;
+      font-weight: 600;
       color: #6f42c1;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid #6f42c1;
-      border-radius: 8px;
+      border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
       white-space: nowrap;
@@ -54,12 +83,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     #training-dataset-button:hover {
       background: rgba(111, 66, 193, 0.1);
-      box-shadow: 0 0 12px rgba(111, 66, 193, 0.2);
-      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(111, 66, 193, 0.2);
+      transform: translateY(-2px);
     }
 
     #training-dataset-button.expanded .expand-arrow {
@@ -74,13 +104,13 @@
     /* 훈련 누출 버튼들 */
     #training-leak-buttons {
       position: absolute;
-      top: 65px; /* 훈련 데이터셋 버튼 아래에 위치 */
+      top: 80px; /* Increased spacing to prevent overlap with two-line text */
       left: 20px; /* 훈련 데이터셋 버튼과 정렬 */
       z-index: 10000;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px; /* Reduced gap to make it more compact */
-      max-width: 250px;
+      gap: 8px; /* Slightly increased gap for better spacing */
+      max-width: 280px; /* Increased width to accommodate better layout */
       opacity: 1;
       visibility: visible;
       transition: all 0.3s ease;
@@ -93,30 +123,36 @@
     }
 
     #training-leak-buttons button {
-      padding: 6px 10px; /* Reduced padding for more compact layout */
-      font-size: 0.75rem; /* Slightly smaller font */
-      font-weight: 500;
+      padding: 10px 12px; /* Increased vertical padding for two-line text */
+      font-size: 0.75rem;
+      font-weight: 600;
       color: #6f42c1;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid #6f42c1;
-      border-radius: 6px;
+      border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       position: relative;
+      line-height: 1.3; /* Better line height for two-line text */
+      text-align: center;
+      min-height: 40px; /* Ensure consistent height for all buttons */
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #training-leak-buttons button:hover {
       background: rgba(111, 66, 193, 0.1);
-      box-shadow: 0 0 10px rgba(111, 66, 193, 0.2);
+      box-shadow: 0 6px 16px rgba(111, 66, 193, 0.2);
       transform: translateY(-1px);
     }
 
-    /* 훈련 누출 버튼들의 활성 상태 */
     #training-leak-buttons button.active {
       background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
       color: white;
       border-color: #5a2d91;
-      box-shadow: 0 0 12px rgba(111, 66, 193, 0.4);
+      box-shadow: 0 6px 16px rgba(111, 66, 193, 0.4);
     }
 
     #training-leak-buttons button.active::before {
@@ -132,7 +168,7 @@
 
     #overlay-buttons {
       position: absolute;
-      top: 180px; /* 훈련 누출 버튼들 아래에 위치 */
+      top: 200px; /* Increased to accommodate larger training leak buttons spacing */
       left: 20px;
       z-index: 10000;
       display: flex;
@@ -146,19 +182,20 @@
       font-size: 0.9rem;
       font-weight: 500;
       color: #007bff;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid #007bff;
-      border-radius: 8px;
+      border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
       white-space: nowrap;
       min-width: 120px;
       position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     #overlay-buttons button:hover {
       background: rgba(0, 123, 255, 0.1);
-      box-shadow: 0 0 12px rgba(0, 123, 255, 0.2);
+      box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
       transform: translateY(-1px);
     }
 
@@ -192,21 +229,20 @@
       transform: translateY(-10px) !important;
     }
 
-    /* Modern Toggle Switch - Moved to bottom left */
+    /* Modern Toggle Switch */
     .toggle-container {
       position: absolute;
-      bottom: 20px; /* Move to bottom */
-      right: 20px; /* Position on the right side */
+      bottom: 20px;
+      right: 20px;
       z-index: 10000;
       display: flex;
       align-items: center;
       gap: 10px;
       background: rgba(255, 255, 255, 0.95);
       padding: 8px 15px;
-      border-radius: 25px;
+      border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
-      height: 40px; /* Set consistent height */
+      height: 40px;
     }
 
     .toggle-label {
@@ -239,7 +275,7 @@
       height: 40px;
       background: rgba(255, 255, 255, 0.95);
       border: 2px solid #007bff;
-      border-radius: 20px;
+      border-radius: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -248,7 +284,6 @@
       font-weight: bold;
       color: #007bff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
       transition: all 0.3s ease;
     }
 
@@ -280,10 +315,8 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(248, 249, 250, 0.95);
-      backdrop-filter: blur(10px) saturate(180%);
-      -webkit-backdrop-filter: blur(10px) saturate(180%);
       border: 1px solid rgba(108, 117, 125, 0.3);
-      border-radius: 12px;
+      border-radius: 16px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
       font-size: 13px;
       z-index: 9999;
@@ -342,7 +375,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 12px 12px 0 0;
+      border-radius: 16px 16px 0 0;
       color: #007bff;
       font-weight: 600;
       font-size: 0.95em;
@@ -380,7 +413,7 @@
       max-width: 100%;
       max-height: 100%;
       background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-      border-radius: 8px;
+      border-radius: 16px;
       border: 1px solid rgba(0, 123, 255, 0.1);
     }
 
@@ -430,7 +463,7 @@
       width: 100%;
       height: 350px;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 12px;
+      border-radius: 16px;
       margin-top: 10px;
       border: 1px solid #dee2e6;
       cursor: grab;
@@ -521,14 +554,13 @@
       width: 280px;
       height: 100vh;
       background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
       transition: left 0.25s ease-out;
       z-index: 15000;
       padding: 20px;
       box-sizing: border-box;
       overflow-y: auto;
+      border-radius: 0 16px 16px 0;
     }
 
     .mobile-sidebar.open {
@@ -611,7 +643,7 @@
       color: #007bff;
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid #007bff;
-      border-radius: 12px;
+      border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-align: left;
@@ -676,7 +708,7 @@
       color: #dc3545;
       background: rgba(255, 255, 255, 0.9);
       border: 1px solid #dc3545;
-      border-radius: 8px;
+      border-radius: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
       text-align: center;
@@ -727,7 +759,6 @@
       width: 50px;
       height: 50px;
       background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
       border: 2px solid #007bff;
       border-radius: 50%;
       cursor: pointer;
@@ -779,15 +810,16 @@
       }
 
       .toggle-container {
-        bottom: 70px; /* Increased margin for mobile browser UI */
+        bottom: calc(15vh + env(safe-area-inset-bottom, 20px)); /* Responsive bottom position with safe area */
         right: 15px;
         left: auto;
         top: auto;
         height: 50px; /* Match hamburger button height */
         align-items: center;
         z-index: 15000; /* Higher than mobile menu */
-        /* Ensure visibility above mobile browser UI */
-        margin-bottom: env(safe-area-inset-bottom, 0px);
+        /* Enhanced mobile browser UI compatibility */
+        min-height: 50px;
+        box-sizing: border-box;
       }
 
       #guide-button {
@@ -797,6 +829,25 @@
         height: 50px;
         font-size: 1.2rem;
         border-radius: 50%;
+      }
+
+      /* Mobile project title */
+      .project-title {
+        top: 15px;
+        padding: 12px 24px;
+        max-width: calc(100vw - 140px); /* Account for hamburger and guide buttons */
+      }
+
+      .project-title-main {
+        font-size: 1.1rem;
+      }
+
+      .project-title-subtitle {
+        font-size: 0.65rem;
+      }
+
+      .project-title-icon {
+        font-size: 1.2em;
       }
 
       /* Hide text on mobile, show only emoji */
@@ -925,7 +976,7 @@
         height: 30vh !important; /* Even smaller for very small screens */
         bottom: 2.5vw !important;
         right: 2.5vw !important;
-        border-radius: 12px;
+        border-radius: 16px;
         font-size: 13px;
       }
 
@@ -980,14 +1031,16 @@
       }
 
       .toggle-container {
-        bottom: 70px; /* Increased margin for very small screens */
+        bottom: calc(15vh + env(safe-area-inset-bottom, 20px)); /* Responsive positioning for mobile browsers */
         right: 15px;
         left: auto;
         top: auto;
         height: 45px; /* Match hamburger button height */
         align-items: center;
-        /* Ensure visibility above mobile browser UI */
-        margin-bottom: env(safe-area-inset-bottom, 0px);
+        /* Enhanced mobile browser compatibility */
+        min-height: 45px;
+        box-sizing: border-box;
+        z-index: 1000;
       }
 
       #guide-button {
@@ -996,6 +1049,25 @@
         top: 15px;
         right: 15px;
         font-size: 1.1rem;
+      }
+
+      /* Very small mobile project title */
+      .project-title {
+        top: 10px;
+        padding: 10px 20px;
+        max-width: calc(100vw - 120px); /* Account for smaller buttons */
+      }
+
+      .project-title-main {
+        font-size: 0.95rem;
+      }
+
+      .project-title-subtitle {
+        font-size: 0.6rem;
+      }
+
+      .project-title-icon {
+        font-size: 1.1em;
       }
     }
 
@@ -1021,6 +1093,12 @@
 </head>
 
 <body>
+  <!-- Project Title -->
+  <div class="project-title">
+    <div class="project-title-main">
+      AI 누출원 탐지 Mockup
+    </div>
+  </div>
 
   <div class="container">
     <div class="right-panel" id="viewer"></div>
@@ -1539,7 +1617,6 @@
         // Preserve any existing drag position
         preservePopupPosition();
         popup.style.background = 'rgba(248, 249, 250, 0.95)';
-        popup.style.backdropFilter = 'blur(10px) saturate(180%)';
       }
       
       // Show popup with animation
@@ -2046,7 +2123,6 @@
         
         // Add semi-transparent background for better visibility of 3D scene behind
         popup.style.background = 'rgba(248, 249, 250, 0.92)';
-        popup.style.backdropFilter = 'blur(15px) saturate(180%)';
       }
       
       // Show popup with animation
@@ -2660,7 +2736,6 @@
         popup.style.right = '20px';
         popup.style.transform = 'none';
         popup.style.background = 'rgba(248, 249, 250, 0.92)';
-        popup.style.backdropFilter = 'blur(15px) saturate(180%)';
       }
       
       // Show popup with animation
@@ -3252,8 +3327,6 @@
       
       // Enhanced acrylic transparency for mobile to show background
       popup.style.background = 'rgba(248, 249, 250, 0.85)';
-      popup.style.backdropFilter = 'blur(20px) saturate(180%)';
-      popup.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
       
       // Remove any existing popup type classes
       popup.classList.remove('guide-popup', 'sensor-popup', 'learning-popup');
