@@ -34,42 +34,11 @@
       height: 100%;
     }
 
-    #overlay-buttons {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 200px;
-    }
-
-    #overlay-buttons button {
-      padding: 10px 15px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #007bff;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid #007bff;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-      min-width: 120px;
-    }
-
-    #overlay-buttons button:hover {
-      background: rgba(0, 123, 255, 0.1);
-      box-shadow: 0 0 12px rgba(0, 123, 255, 0.2);
-      transform: translateY(-1px);
-    }
-
-    /* Training Dataset Button */
+    /* 훈련 데이터셋 버튼 */
     #training-dataset-button {
       position: absolute;
-      top: 180px; /* Positioned below overlay buttons */
-      left: 20px; /* Aligned with overlay buttons */
+      top: 20px; /* Moved to top */
+      left: 20px; /* Aligned with other buttons */
       z-index: 10000;
       padding: 10px 15px;
       font-size: 0.9rem;
@@ -102,11 +71,11 @@
       margin-left: 8px;
     }
 
-    /* Training Leak Buttons */
+    /* 훈련 누출 버튼들 */
     #training-leak-buttons {
       position: absolute;
-      top: 225px; /* Positioned below training dataset button */
-      left: 20px; /* Aligned with training dataset button */
+      top: 65px; /* 훈련 데이터셋 버튼 아래에 위치 */
+      left: 20px; /* 훈련 데이터셋 버튼과 정렬 */
       z-index: 10000;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -133,6 +102,7 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
     }
 
     #training-leak-buttons button:hover {
@@ -141,16 +111,91 @@
       transform: translateY(-1px);
     }
 
+    /* 훈련 누출 버튼들의 활성 상태 */
+    #training-leak-buttons button.active {
+      background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
+      color: white;
+      border-color: #5a2d91;
+      box-shadow: 0 0 12px rgba(111, 66, 193, 0.4);
+    }
+
+    #training-leak-buttons button.active::before {
+      content: "●";
+      position: absolute;
+      left: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ff88;
+      font-size: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    #overlay-buttons {
+      position: absolute;
+      top: 180px; /* 훈련 누출 버튼들 아래에 위치 */
+      left: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 200px;
+    }
+
+    #overlay-buttons button {
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #007bff;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #007bff;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      min-width: 120px;
+      position: relative;
+    }
+
+    #overlay-buttons button:hover {
+      background: rgba(0, 123, 255, 0.1);
+      box-shadow: 0 0 12px rgba(0, 123, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* Active state for running functions */
+    #overlay-buttons button.active {
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: white;
+      border-color: #0056b3;
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+    }
+
+    #overlay-buttons button.active::before {
+      content: "●";
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ff88;
+      font-size: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     .hidden {
       opacity: 0 !important;
       visibility: hidden !important;
       transform: translateY(-10px) !important;
     }
 
-    /* Modern Toggle Switch */
+    /* Modern Toggle Switch - Moved to bottom left */
     .toggle-container {
       position: absolute;
-      top: 20px; /* Move to top-right corner */
+      bottom: 20px; /* Move to bottom */
       right: 20px; /* Position on the right side */
       z-index: 10000;
       display: flex;
@@ -249,10 +294,15 @@
       overflow: hidden;
       box-sizing: border-box;
       
-      /* Animation properties - Reduced intensity for smoother dragging */
+      /* Animation properties - Only for show/hide, not for dragging */
       opacity: 0;
       visibility: hidden;
-      transition: all 0.2s ease;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    /* Disable transitions during dragging for smooth movement */
+    #popup.dragging {
+      transition: none !important;
     }
 
     #popup.show {
@@ -285,7 +335,8 @@
     }
 
     #popup-header {
-      cursor: move;
+      cursor: grab;
+      cursor: -webkit-grab;
       padding: 10px 15px;
       border-bottom: 1px solid rgba(108, 117, 125, 0.2);
       display: flex;
@@ -298,6 +349,20 @@
       height: 40px;
       box-sizing: border-box;
       flex-shrink: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    
+    #popup-header:active {
+      cursor: grabbing;
+      cursor: -webkit-grabbing;
+    }
+    
+    #popup-header:active {
+      cursor: grabbing;
+      cursor: -webkit-grabbing;
     }
 
     #popup-content {
@@ -331,11 +396,33 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      /* Enhanced mobile touch target */
+      min-width: 32px;
+      min-height: 32px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /* Prevent accidental drag */
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+      /* Higher z-index to ensure it's always clickable */
+      position: relative;
+      z-index: 10001;
     }
 
     #closeButton:hover {
       background: rgba(0, 123, 255, 0.1);
       color: #0056b3;
+    }
+
+    #closeButton:active {
+      background: rgba(0, 123, 255, 0.2);
+      transform: scale(0.95);
     }
 
     /* Neural network animation canvas */
@@ -531,12 +618,32 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      position: relative;
     }
 
     .sidebar-button:hover, .sidebar-button:active {
       background: rgba(0, 123, 255, 0.1);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Active state for sidebar main function buttons */
+    .sidebar-button.active {
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: white;
+      border-color: #0056b3;
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .sidebar-button.active::before {
+      content: "●";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ff88;
+      font-size: 8px;
+      animation: pulse 2s infinite;
     }
 
     /* Better touch feedback for mobile */
@@ -573,6 +680,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-align: center;
+      position: relative;
     }
 
     .sidebar-leak-button:hover, .sidebar-leak-button:active {
@@ -580,7 +688,26 @@
       transform: translateY(-1px);
     }
 
-    /* Training leak buttons in sidebar */
+    /* Active state for sidebar leak buttons */
+    .sidebar-leak-button.active {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      border-color: #c82333;
+      box-shadow: 0 0 12px rgba(220, 53, 69, 0.3);
+    }
+
+    .sidebar-leak-button.active::before {
+      content: "●";
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00ff88;
+      font-size: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    /* 사이드바의 훈련 누출 버튼들 */
     .training-leak-button {
       color: #6f42c1 !important;
       border-color: #6f42c1 !important;
@@ -652,10 +779,13 @@
       }
 
       .toggle-container {
-        top: 20px;
-        right: 80px; /* Position to the left of guide button on mobile */
+        bottom: 20px; /* Keep at bottom right for mobile */
+        right: 20px;
+        left: auto;
+        top: auto;
         height: 50px; /* Match hamburger button height */
         align-items: center;
+        z-index: 15000; /* Higher than mobile menu */
       }
 
       #guide-button {
@@ -702,16 +832,58 @@
         font-size: 14px;
       }
 
+      /* Learning popup gets centered with 1/2 screen height */
+      #popup.learning-popup {
+        width: 90vw !important;
+        height: 50vh !important; /* 1/2 of screen height for learning popup */
+        max-width: 90vw !important;
+        max-height: 50vh !important;
+        top: 50% !important;
+        left: 50% !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+
       #popup-header {
         padding: 12px 15px;
         font-size: 0.9rem;
         height: 45px;
+        /* Enable dragging on mobile with visual feedback */
+        cursor: grab !important;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        /* Add subtle background to indicate draggable area */
+        background: rgba(0, 123, 255, 0.05);
+        border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+      }
+      
+      #popup-header:active {
+        cursor: grabbing !important;
+        background: rgba(0, 123, 255, 0.1);
       }
 
       #popup-content {
         height: calc(100% - 45px);
         padding: 12px;
         font-size: 0.85rem;
+      }
+
+      /* Enhanced close button for mobile */
+      #closeButton {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+        border-width: 2px !important;
+        /* Better touch target */
+        position: relative;
+        z-index: 10001;
       }
 
       /* Neural network canvas mobile optimization */
@@ -755,6 +927,28 @@
         font-size: 13px;
       }
 
+      /* Guide popup for very small screens */
+      #popup.guide-popup {
+        width: 95vw !important;
+        height: 70vh !important;
+        top: 50% !important;
+        left: 50% !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+      }
+
+      /* Learning popup for very small screens */
+      #popup.learning-popup {
+        width: 95vw !important;
+        height: 45vh !important; /* Slightly smaller on very small screens */
+        top: 50% !important;
+        left: 50% !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+      }
+
       #popup-header {
         font-size: 0.85rem;
         height: 40px;
@@ -784,8 +978,10 @@
       }
 
       .toggle-container {
-        right: 70px; /* Better alignment for smaller screens - position to the left of guide button */
-        top: 15px;
+        bottom: 15px; /* Keep at bottom right for very small screens too */
+        right: 15px;
+        left: auto;
+        top: auto;
         height: 45px; /* Match hamburger button height */
         align-items: center;
       }
@@ -842,48 +1038,48 @@
     </div>
     
     <div class="sidebar-section">
-      <div class="sidebar-section-title">주요 기능</div>
-      <button class="sidebar-button" onclick="LearningStart(); closeMobileSidebar();">
-        🤖 AI 신경망 학습
-      </button>
-      <button class="sidebar-button" onclick="LeakDetection(); closeMobileSidebar();">
-        🔍 AI 기반 누출 탐지
-      </button>
-      <button class="sidebar-button" onclick="Dispersion(); closeMobileSidebar();">
-        🌊 암모니아 확산 양상
-      </button>
+      <div class="sidebar-section-title">훈련 데이터셋</div>
+      <div class="sidebar-leak-buttons">
+        <button id="sidebar-leak-1-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(1); closeMobileSidebar();">훈련 누출 #1</button>
+        <button id="sidebar-leak-2-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(2); closeMobileSidebar();">훈련 누출 #2</button>
+        <button id="sidebar-leak-3-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(3); closeMobileSidebar();">훈련 누출 #3</button>
+        <button id="sidebar-leak-4-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(4); closeMobileSidebar();">훈련 누출 #4</button>
+        <button id="sidebar-leak-5-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(5); closeMobileSidebar();">훈련 누출 #5</button>
+        <button id="sidebar-leak-6-btn" class="sidebar-leak-button training-leak-button" onclick="showLeakData(6); closeMobileSidebar();">훈련 누출 #6</button>
+      </div>
     </div>
     
     <div class="sidebar-section">
-      <div class="sidebar-section-title">훈련 데이터셋</div>
-      <div class="sidebar-leak-buttons">
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(1); closeMobileSidebar();">Training Leak #1</button>
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(2); closeMobileSidebar();">Training Leak #2</button>
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(3); closeMobileSidebar();">Training Leak #3</button>
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(4); closeMobileSidebar();">Training Leak #4</button>
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(5); closeMobileSidebar();">Training Leak #5</button>
-        <button class="sidebar-leak-button training-leak-button" onclick="showLeakData(6); closeMobileSidebar();">Training Leak #6</button>
-      </div>
+      <div class="sidebar-section-title">주요 기능</div>
+      <button id="sidebar-learning-btn" class="sidebar-button" onclick="LearningStart(); closeMobileSidebar();">
+        🤖 AI 신경망 학습
+      </button>
+      <button id="sidebar-detection-btn" class="sidebar-button" onclick="LeakDetection(); closeMobileSidebar();">
+        🔍 AI 기반 누출 탐지
+      </button>
+      <button id="sidebar-dispersion-btn" class="sidebar-button" onclick="Dispersion(); closeMobileSidebar();">
+        🌊 암모니아 확산 양상
+      </button>
     </div>
   </div>
 
-  <div id="overlay-buttons">
-    <button onclick="LearningStart()">🤖 AI 신경망 학습</button>
-    <button onclick="LeakDetection()">🔍 AI 기반 누출 탐지</button>
-    <button onclick="Dispersion()">🌊 암모니아 확산 양상</button>
-  </div>
-
   <button id="training-dataset-button" onclick="toggleTrainingDataset()" title="훈련 데이터셋">
-    📊 Training Dataset <span class="expand-arrow">▲</span>
+    📊 훈련 데이터셋 <span class="expand-arrow">▼</span>
   </button>
   
-  <div id="training-leak-buttons" class="hidden">
-    <button onclick="showLeakData(1)">Training Leak #1</button>
-    <button onclick="showLeakData(2)">Training Leak #2</button>
-    <button onclick="showLeakData(3)">Training Leak #3</button>
-    <button onclick="showLeakData(4)">Training Leak #4</button>
-    <button onclick="showLeakData(5)">Training Leak #5</button>
-    <button onclick="showLeakData(6)">Training Leak #6</button>
+  <div id="training-leak-buttons" class="training-buttons hidden">
+    <button id="leak-1-btn" onclick="showLeakData(1)">훈련 누출 #1</button>
+    <button id="leak-2-btn" onclick="showLeakData(2)">훈련 누출 #2</button>
+    <button id="leak-3-btn" onclick="showLeakData(3)">훈련 누출 #3</button>
+    <button id="leak-4-btn" onclick="showLeakData(4)">훈련 누출 #4</button>
+    <button id="leak-5-btn" onclick="showLeakData(5)">훈련 누출 #5</button>
+    <button id="leak-6-btn" onclick="showLeakData(6)">훈련 누출 #6</button>
+  </div>
+
+  <div id="overlay-buttons">
+    <button id="learning-btn" onclick="LearningStart()">🤖 AI 신경망 학습</button>
+    <button id="detection-btn" onclick="LeakDetection()">🔍 AI 기반 누출 탐지</button>
+    <button id="dispersion-btn" onclick="Dispersion()">🌊 암모니아 확산 양상</button>
   </div>
 
   <div id="guide-button" onclick="toggleGuide()" title="사용법 가이드">
@@ -900,7 +1096,7 @@
   <div id="popup">
     <div id="popup-header">
       <span id="popupTitle">정보</span>
-      <button id="closeButton" onclick="closePopup()">✖</button>
+      <button id="closeButton" onclick="closePopup()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">✖</button>
     </div>
     <div id="popup-content"></div>
   </div>
@@ -968,6 +1164,59 @@
     // Dispersion variables
     let dispersionGroup = new THREE.Group();
     let isDispersionActive = false;
+
+    // Function to update button active states based on toggleStates
+    function updateButtonStates() {
+      // Desktop buttons
+      const desktopButtons = {
+        learning: document.getElementById('learning-btn'),
+        detection: document.getElementById('detection-btn'),
+        dispersion: document.getElementById('dispersion-btn'),
+        leak1: document.getElementById('leak-1-btn'),
+        leak2: document.getElementById('leak-2-btn'),
+        leak3: document.getElementById('leak-3-btn'),
+        leak4: document.getElementById('leak-4-btn'),
+        leak5: document.getElementById('leak-5-btn'),
+        leak6: document.getElementById('leak-6-btn')
+      };
+
+      // Mobile buttons
+      const mobileButtons = {
+        learning: document.getElementById('sidebar-learning-btn'),
+        detection: document.getElementById('sidebar-detection-btn'),
+        dispersion: document.getElementById('sidebar-dispersion-btn'),
+        leak1: document.getElementById('sidebar-leak-1-btn'),
+        leak2: document.getElementById('sidebar-leak-2-btn'),
+        leak3: document.getElementById('sidebar-leak-3-btn'),
+        leak4: document.getElementById('sidebar-leak-4-btn'),
+        leak5: document.getElementById('sidebar-leak-5-btn'),
+        leak6: document.getElementById('sidebar-leak-6-btn')
+      };
+
+      // Update desktop buttons
+      Object.keys(desktopButtons).forEach(key => {
+        const button = desktopButtons[key];
+        if (button) {
+          if (toggleStates[key]) {
+            button.classList.add('active');
+          } else {
+            button.classList.remove('active');
+          }
+        }
+      });
+
+      // Update mobile buttons  
+      Object.keys(mobileButtons).forEach(key => {
+        const button = mobileButtons[key];
+        if (button) {
+          if (toggleStates[key]) {
+            button.classList.add('active');
+          } else {
+            button.classList.remove('active');
+          }
+        }
+      });
+    }
 
     init();
     loadModel('https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/model_GE-v1.glb');
@@ -1148,7 +1397,15 @@
       labelDiv.style.cursor = 'pointer';
       labelDiv.addEventListener('click', (e) => {
         e.stopPropagation();
-        showLeakData(sphere.userData.leakNumber);
+        const leakNumber = sphere.userData.leakNumber;
+        if (leakNumber === 7) {
+          // For Leak #7, call LeakDetection instead of showLeakData
+          toggleStates.detection = false; // Reset first to ensure proper toggle
+          updateButtonStates(); // Update UI to reflect the state
+          LeakDetection(); // This will properly activate AI-based detection
+        } else {
+          showLeakData(leakNumber);
+        }
       });
       document.body.appendChild(labelDiv);
       sensorLabels.push({mesh: sphere, div: labelDiv});
@@ -1232,16 +1489,21 @@
     }
 
     // AI Learning with interactive neural network visualization
-    function LearningStart() {
+    async function LearningStart() {
       if (toggleStates.learning) {
         closePopup();
         toggleStates.learning = false;
+        updateButtonStates();
         return;
       }
+      
+      // Ensure clean state before proceeding
+      await ensureCleanState();
       
       // Reset other toggles
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates.learning = true;
+      updateButtonStates();
       
       popupLocked = true;
       popupTitleElement.textContent = "AI 학습 - 신경망 시각화";
@@ -1260,7 +1522,7 @@
       document.getElementById('popup-content').innerHTML = html;
       
       if (isMobileDevice()) {
-        adjustPopupForMobile();
+        adjustPopupForMobile('learning'); // Use 'learning' type for neural network popup
       } else {
         popup.style.width = '520px';
         popup.style.maxWidth = '90vw';
@@ -1270,7 +1532,8 @@
         popup.style.right = 'auto';
         popup.style.top = '50%';
         popup.style.left = '50%';
-        popup.style.transform = 'translate(-50%, -50%)';
+        // Preserve any existing drag position
+        preservePopupPosition();
         popup.style.background = 'rgba(248, 249, 250, 0.95)';
         popup.style.backdropFilter = 'blur(10px) saturate(180%)';
       }
@@ -1518,26 +1781,25 @@
     }
 
     // Show leak data for specific leak numbers
-    function showLeakData(leakNumber) {
+    async function showLeakData(leakNumber) {
       const leakKey = `leak${leakNumber}`;
       
       if (toggleStates[leakKey]) {
         closePopup();
         toggleStates[leakKey] = false;
+        updateButtonStates();
         return;
       }
+      
+      // Ensure clean state before proceeding
+      await ensureCleanState();
       
       // Reset other toggles
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates[leakKey] = true;
+      updateButtonStates();
       
       const chartKey = `leak_${leakNumber}`;
-      
-      // For rapid clicking between different leaks, always reload the data
-      if (leakTimer) clearInterval(leakTimer);
-      if (leakChart) leakChart.destroy();
-      leakData = [];
-      leakIndex = 0;
 
       popupLocked = false;
       popupTitleElement.textContent = `Leak #${leakNumber} - 센서 데이터`;
@@ -1788,50 +2050,41 @@
     }
 
     // AI-based leak detection (using scenario 7 data)
-    function LeakDetection() {
+    async function LeakDetection() {
+      // Check if detection is already active and toggle off if needed
       if (toggleStates.detection) {
         closePopup();
         toggleStates.detection = false;
+        updateButtonStates();
         return;
       }
       
-      // Reset other toggles
+      // Ensure clean state before proceeding
+      await ensureCleanState();
+      
+      // Reset other toggles and set detection to true
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates.detection = true;
-      
-      if (leakTimer) clearInterval(leakTimer);
-      if (leakChart) leakChart.destroy();
-      leakData = [];
-      leakIndex = 0;
+      updateButtonStates();
 
       popupLocked = false;
       popupTitleElement.textContent = "AI 기반 누출 추정 - Leak #7";
 
-      // Remove existing status cubes
-      ['GE#1', 'GE#2', 'GE#3'].forEach(cubeName => {
-        const existingCube = scene.getObjectByName(cubeName);
-        if (existingCube) {
-          scene.remove(existingCube);
-          if (existingCube.geometry) existingCube.geometry.dispose();
-          if (existingCube.material) existingCube.material.dispose();
-        }
-      });
-
       // Create status cubes with wireframe
       const geometry = new THREE.BoxGeometry(2, 10, 3);
       
-      const statusCube1 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
-      const statusCube2 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
-      const statusCube3 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0x00ff00, transparent: true, opacity: 0.5 }));
+      const statusCube1 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 }));
+      const statusCube2 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 }));
+      const statusCube3 = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 }));
 
-      // Add wireframes
+      // Add wireframes with explicit red color initialization
       const edges1 = new THREE.EdgesGeometry(geometry);
       const edges2 = new THREE.EdgesGeometry(geometry);
       const edges3 = new THREE.EdgesGeometry(geometry);
       
-      const wireframe1 = new THREE.LineSegments(edges1, new THREE.LineBasicMaterial({ color: 0x00ff00 }));
-      const wireframe2 = new THREE.LineSegments(edges2, new THREE.LineBasicMaterial({ color: 0x00ff00 }));
-      const wireframe3 = new THREE.LineSegments(edges3, new THREE.LineBasicMaterial({ color: 0x00ff00 }));
+      const wireframe1 = new THREE.LineSegments(edges1, new THREE.LineBasicMaterial({ color: 0xff0000 })); // Red wireframe
+      const wireframe2 = new THREE.LineSegments(edges2, new THREE.LineBasicMaterial({ color: 0xff0000 })); // Red wireframe
+      const wireframe3 = new THREE.LineSegments(edges3, new THREE.LineBasicMaterial({ color: 0xff0000 })); // Red wireframe
 
       statusCube1.position.set(3.5, -1, 2);
       statusCube2.position.set(-0.4, -1, 2);
@@ -1855,6 +2108,19 @@
       scene.add(wireframe1);
       scene.add(wireframe2);
       scene.add(wireframe3);
+
+      // Force initial color state to red for all cubes and wireframes
+      setTimeout(() => {
+        [statusCube1, statusCube2, statusCube3].forEach((cube, idx) => {
+          if (cube && cube.material) {
+            cube.material.color.setRGB(1, 0, 0); // Red cubes initially
+          }
+          const wire = scene.getObjectByName(`GE#${idx + 1}_wire`);
+          if (wire && wire.material) {
+            wire.material.color.setRGB(1, 0, 0); // Red wireframes initially
+          }
+        });
+      }, 50); // Small delay to ensure objects are properly added to scene
 
       const csvPath = './sensor_data/scenario_7-1.csv';
       const backupPath = 'https://raw.githubusercontent.com/Jaehui-Jeong/TestSources/refs/heads/main/sensor_data/scenario_7-1.csv';
@@ -1929,7 +2195,7 @@
                 const maxValue = Math.max(...point.yValues);
                 const maxIndex = point.yValues.indexOf(maxValue);
                 
-                // Reset all cubes to green first
+                // Reset all cubes to green first (during animation)
                 [statusCube1, statusCube2, statusCube3].forEach((cube, idx) => {
                   if (cube && cube.material) {
                     cube.material.color.setRGB(0, 1, 0);
@@ -1973,12 +2239,16 @@
     }
 
     // Ammonia dispersion simulation with enhanced physics
-    function Dispersion() {
+    async function Dispersion() {
       if (toggleStates.dispersion) {
         closePopup();
         toggleStates.dispersion = false;
+        updateButtonStates();
         return;
       }
+      
+      // Ensure clean state before proceeding
+      await ensureCleanState();
       
       // Close any existing popup first
       if (popup.classList.contains('show')) {
@@ -1988,15 +2258,7 @@
       // Reset other toggles
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates.dispersion = true;
-      
-      // Clear any existing animations and dispersion objects
-      if (leakTimer) clearInterval(leakTimer);
-      if (leakChart) leakChart.destroy();
-      if (window.dispersionInterval) clearInterval(window.dispersionInterval);
-      if (window.dispersionAnimationId) cancelAnimationFrame(window.dispersionAnimationId);
-      
-      // Clear existing dispersion objects
-      dispersionGroup.clear();
+      updateButtonStates();
       
       // External box dimensions
       const boxWidth = 13.8;
@@ -2401,178 +2663,417 @@
       popup.classList.add('show');
     }
 
+    // Enhanced cleanup function with immediate cache clearing
+    function clearAllCache() {
+      // Stop neural network animation immediately
+      if (window.neuralNetAnimationId) {
+        cancelAnimationFrame(window.neuralNetAnimationId);
+        window.neuralNetAnimationId = null;
+      }
+
+      // Stop chart animation immediately
+      if (leakTimer) {
+        clearInterval(leakTimer);
+        leakTimer = null;
+      }
+      if (leakChart) {
+        leakChart.destroy();
+        leakChart = null;
+      }
+
+      // Stop dispersion animation immediately
+      if (window.dispersionInterval) {
+        clearInterval(window.dispersionInterval);
+        window.dispersionInterval = null;
+      }
+      if (window.dispersionAnimationId) {
+        cancelAnimationFrame(window.dispersionAnimationId);
+        window.dispersionAnimationId = null;
+      }
+
+      // Clear dispersion objects immediately
+      if (dispersionGroup) {
+        dispersionGroup.clear();
+      }
+      isDispersionActive = false;
+
+      // Remove status cubes and wireframes immediately
+      ['GE#1', 'GE#2', 'GE#3', 'GE#1_wire', 'GE#2_wire', 'GE#3_wire'].forEach(objName => {
+        const existingObj = scene.getObjectByName(objName);
+        if (existingObj) {
+          scene.remove(existingObj);
+          if (existingObj.geometry) existingObj.geometry.dispose();
+          if (existingObj.material) {
+            if (Array.isArray(existingObj.material)) {
+              existingObj.material.forEach(mat => mat.dispose());
+            } else {
+              existingObj.material.dispose();
+            }
+          }
+        }
+      });
+
+      // Clear stored chart data to prevent cache issues
+      Object.keys(storedChartData).forEach(key => {
+        delete storedChartData[key];
+      });
+
+      // Reset data arrays
+      leakData = [];
+      leakIndex = 0;
+
+      // Clear any cached network data
+      if (window.networkCtx) {
+        window.networkCtx.clearRect(0, 0, window.networkCanvas.width, window.networkCanvas.height);
+      }
+      
+      // Force garbage collection by nullifying references
+      if (window.networkCanvas) {
+        window.networkCanvas = null;
+        window.networkCtx = null;
+      }
+    }
+
+    // Enhanced function to ensure clean state before starting new features
+    function ensureCleanState() {
+      return new Promise((resolve) => {
+        clearAllCache();
+        // Small delay to ensure all cleanup is complete
+        setTimeout(resolve, 10);
+      });
+    }
+
     function closePopup() {
+      // Immediately clear all cache and stop animations to prevent interference
+      clearAllCache();
+      
       // Reset all toggle states
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
+      updateButtonStates();
       
       // Hide popup with animation
       popup.classList.remove('show');
-      
-      // Stop animations after transition completes
-      setTimeout(() => {
-        // Stop neural network animation
-        if (window.neuralNetAnimationId) {
-          cancelAnimationFrame(window.neuralNetAnimationId);
-          window.neuralNetAnimationId = null;
-        }
-
-        // Stop chart animation
-        if (leakTimer) {
-          clearInterval(leakTimer);
-          leakTimer = null;
-        }
-        if (leakChart) {
-          leakChart.destroy();
-          leakChart = null;
-        }
-
-        // Stop dispersion animation
-        if (window.dispersionInterval) {
-          clearInterval(window.dispersionInterval);
-          window.dispersionInterval = null;
-        }
-        if (window.dispersionAnimationId) {
-          cancelAnimationFrame(window.dispersionAnimationId);
-          window.dispersionAnimationId = null;
-        }
-
-        // Clear dispersion objects
-        if (dispersionGroup) {
-          dispersionGroup.clear();
-        }
-        isDispersionActive = false;
-
-        // Remove status cubes
-        ['GE#1', 'GE#2', 'GE#3'].forEach(cubeName => {
-          const existingCube = scene.getObjectByName(cubeName);
-          if (existingCube) {
-            scene.remove(existingCube);
-            if (existingCube.geometry) existingCube.geometry.dispose();
-            if (existingCube.material) existingCube.material.dispose();
-          }
-        });
-      }, 500); // Wait for animation to complete
 
       popupLocked = false;
     }
 
-    function setupEventListeners() {
-      // Draggable popup (Desktop and Mobile) - Fixed version
-      let isDragging = false;
-      let isTouchDragging = false;
-      let startX = 0, startY = 0;
-      let initialTranslateX = 0, initialTranslateY = 0;
+    // Global helper function to get current translate values
+    function getCurrentTranslate() {
+      const transform = popup.style.transform;
+      if (!transform || transform === 'none') return { x: 0, y: 0 };
+      
+      // Try to match translate3d first, then translate with calc
+      let match = transform.match(/translate3d\(calc\(-50% \+ (-?\d+(?:\.\d+)?)px\), calc\(-50% \+ (-?\d+(?:\.\d+)?)px\), 0\)/);
+      if (match) {
+        return { x: parseFloat(match[1]), y: parseFloat(match[2]) };
+      }
+      
+      // Fallback to regular translate with calc
+      match = transform.match(/translate\(calc\(-50% \+ (-?\d+(?:\.\d+)?)px\), calc\(-50% \+ (-?\d+(?:\.\d+)?)px\)\)/);
+      if (match) {
+        return { x: parseFloat(match[1]), y: parseFloat(match[2]) };
+      }
+      
+      // Fallback to simple translate
+      match = transform.match(/translate\((-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/);
+      if (match) {
+        return { x: parseFloat(match[1]), y: parseFloat(match[2]) };
+      }
+      
+      // Check for basic translate(-50%, -50%) - this means no drag offset
+      if (transform.includes('translate(-50%, -50%)')) {
+        return { x: 0, y: 0 };
+      }
+      
+      return { x: 0, y: 0 };
+    }
 
-      // Helper function to get current translate values
-      function getCurrentTranslate() {
-        const computedStyle = window.getComputedStyle(popup);
-        const transform = computedStyle.transform;
-        
-        if (transform === 'none' || !transform.includes('matrix')) {
-          return { x: 0, y: 0 };
+    // Enhanced function to get actual popup position including computed styles
+    function getActualPopupPosition() {
+      const rect = popup.getBoundingClientRect();
+      const viewportCenterX = window.innerWidth / 2;
+      const viewportCenterY = window.innerHeight / 2;
+      
+      // Calculate the offset from center
+      const popupCenterX = rect.left + rect.width / 2;
+      const popupCenterY = rect.top + rect.height / 2;
+      
+      const offsetX = popupCenterX - viewportCenterX;
+      const offsetY = popupCenterY - viewportCenterY;
+      
+      return { x: offsetX, y: offsetY };
+    }
+
+    // Global function to preserve drag position when popup is reopened
+    function preservePopupPosition() {
+      if (!isMobileDevice()) {
+        // Check if popup is already visible and has been moved from center
+        if (popup.classList.contains('show')) {
+          const actualPosition = getActualPopupPosition();
+          if (Math.abs(actualPosition.x) > 5 || Math.abs(actualPosition.y) > 5) {
+            // If popup was previously dragged (more than 5px from center), maintain that position
+            popup.style.left = '50%';
+            popup.style.top = '50%';
+            popup.style.transform = `translate3d(calc(-50% + ${actualPosition.x}px), calc(-50% + ${actualPosition.y}px), 0)`;
+            return;
+          }
         }
         
-        const matrix = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
-        return {
-          x: parseFloat(matrix[4]) || 0,
-          y: parseFloat(matrix[5]) || 0
-        };
-      }
-
-      // Desktop mouse events
-      popupHeader.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        isDragging = true;
-        
-        // Get starting mouse position
-        startX = e.clientX;
-        startY = e.clientY;
-        
-        // Get current translate values
+        // Fallback to parsed transform for initial positioning
         const currentTranslate = getCurrentTranslate();
-        initialTranslateX = currentTranslate.x;
-        initialTranslateY = currentTranslate.y;
-        
-        document.body.style.userSelect = 'none';
-        popup.style.cursor = 'grabbing';
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-          e.preventDefault();
-          
-          // Calculate the movement delta
-          const deltaX = e.clientX - startX;
-          const deltaY = e.clientY - startY;
-          
-          // Apply the movement to the initial position
-          const newX = initialTranslateX + deltaX;
-          const newY = initialTranslateY + deltaY;
-          
-          // Update popup position
+        if (currentTranslate.x !== 0 || currentTranslate.y !== 0) {
+          // If popup was previously dragged, maintain that position
           popup.style.left = '50%';
           popup.style.top = '50%';
-          popup.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+          popup.style.transform = `translate3d(calc(-50% + ${currentTranslate.x}px), calc(-50% + ${currentTranslate.y}px), 0)`;
+        } else {
+          // Reset to center if no previous drag
+          popup.style.left = '50%';
+          popup.style.top = '50%';
+          popup.style.transform = 'translate(-50%, -50%)';
         }
-      });
+      }
+    }
 
-      document.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
-          document.body.style.userSelect = '';
-          popup.style.cursor = 'auto';
-        }
-      });
+    function setupEventListeners() {
+      // Draggable popup - Desktop only (Mobile uses fixed positioning)
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let initialTranslateX = 0, initialTranslateY = 0;
+      let dragAnimationId = null;
 
-      // Mobile touch events
-      popupHeader.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (e.touches.length === 1) {
-          isTouchDragging = true;
-          const touch = e.touches[0];
+      // Desktop-only dragging functionality
+      if (!isMobileDevice()) {
+        // Desktop mouse events for dragging
+        popupHeader.addEventListener('mousedown', (e) => {
+          // Skip if clicking on close button
+          if (e.target.closest('#closeButton')) return;
           
-          // Get starting touch position
+          e.preventDefault();
+          isDragging = true;
+          
+          // Disable transitions during dragging for immediate response
+          popup.classList.add('dragging');
+          
+          // Get starting mouse position
+          startX = e.clientX;
+          startY = e.clientY;
+          
+          // Use actual popup position instead of parsed transform to fix origin issue
+          const actualPosition = getActualPopupPosition();
+          initialTranslateX = actualPosition.x;
+          initialTranslateY = actualPosition.y;
+          
+          // Debug: Log current state with both methods
+          const parsedTranslate = getCurrentTranslate();
+          console.log('Drag start:', {
+            mouseX: startX,
+            mouseY: startY,
+            currentTransform: popup.style.transform,
+            parsedTranslateX: parsedTranslate.x,
+            parsedTranslateY: parsedTranslate.y,
+            actualTranslateX: initialTranslateX,
+            actualTranslateY: initialTranslateY
+          });
+          
+          document.body.style.userSelect = 'none';
+          popupHeader.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+          if (isDragging) {
+            e.preventDefault();
+            
+            // Use requestAnimationFrame for smoother movement
+            if (dragAnimationId) {
+              cancelAnimationFrame(dragAnimationId);
+            }
+            
+            dragAnimationId = requestAnimationFrame(() => {
+              // Calculate the movement delta
+              const deltaX = e.clientX - startX;
+              const deltaY = e.clientY - startY;
+              
+              // Apply the movement to the initial position
+              const newX = initialTranslateX + deltaX;
+              const newY = initialTranslateY + deltaY;
+              
+              // Update popup position with hardware acceleration
+              popup.style.left = '50%';
+              popup.style.top = '50%';
+              popup.style.transform = `translate3d(calc(-50% + ${newX}px), calc(-50% + ${newY}px), 0)`;
+            });
+          }
+        });
+
+        document.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            
+            // Cancel any pending animation frame
+            if (dragAnimationId) {
+              cancelAnimationFrame(dragAnimationId);
+              dragAnimationId = null;
+            }
+            
+            // Re-enable transitions after dragging ends
+            popup.classList.remove('dragging');
+            
+            document.body.style.userSelect = '';
+            popupHeader.style.cursor = 'grab';
+          }
+        });
+
+        // Desktop zoom functionality for popup content
+        popup.addEventListener('wheel', (e) => {
+          // Only allow zooming on charts and network visualizations
+          if (e.target.closest('#leakChart') || e.target.closest('#networkCanvas')) {
+            e.preventDefault();
+            const element = e.target.closest('canvas');
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              const scaleX = (e.clientX - rect.left) / rect.width;
+              const scaleY = (e.clientY - rect.top) / rect.height;
+              
+              const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+              const currentScale = element.style.transform?.match(/scale\(([^)]+)\)/)?.[1] || 1;
+              const newScale = Math.max(0.5, Math.min(3, currentScale * scaleFactor));
+              
+              element.style.transformOrigin = `${scaleX * 100}% ${scaleY * 100}%`;
+              element.style.transform = `scale(${newScale})`;
+            }
+          }
+        });
+      } else {
+        // Mobile-specific touch handling for popup content (zoom/pan for charts)
+        let isPinching = false;
+        let initialDistance = 0;
+        let initialScale = 1;
+        let isDraggingPopup = false;
+        let startX = 0, startY = 0;
+        let initialTranslateX = 0, initialTranslateY = 0;
+        let touchDragAnimationId = null;
+        
+        // Enhanced close button for mobile
+        const closeButton = document.getElementById('closeButton');
+        if (closeButton) {
+          closeButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closePopup();
+          }, { passive: false });
+          
+          closeButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closePopup();
+          });
+        }
+
+        // Popup dragging for mobile
+        popupHeader.addEventListener('touchstart', (e) => {
+          if (e.target.closest('#closeButton')) return;
+          
+          e.preventDefault();
+          isDraggingPopup = true;
+          
+          // Disable transitions during dragging for immediate response
+          popup.classList.add('dragging');
+          
+          const touch = e.touches[0];
           startX = touch.clientX;
           startY = touch.clientY;
           
-          // Get current translate values
-          const currentTranslate = getCurrentTranslate();
-          initialTranslateX = currentTranslate.x;
-          initialTranslateY = currentTranslate.y;
-        }
-      }, { passive: false });
+          // Use actual popup position for mobile touch too
+          const actualPosition = getActualPopupPosition();
+          initialTranslateX = actualPosition.x;
+          initialTranslateY = actualPosition.y;
+        }, { passive: false });
 
-      document.addEventListener('touchmove', (e) => {
-        if (isTouchDragging && e.touches.length === 1) {
-          e.preventDefault();
-          const touch = e.touches[0];
-          
-          // Calculate the movement delta
-          const deltaX = touch.clientX - startX;
-          const deltaY = touch.clientY - startY;
-          
-          // Apply the movement to the initial position
-          const newX = initialTranslateX + deltaX;
-          const newY = initialTranslateY + deltaY;
-          
-          // Update popup position
-          popup.style.left = '50%';
-          popup.style.top = '50%';
-          popup.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
-        }
-      }, { passive: false });
+        document.addEventListener('touchmove', (e) => {
+          if (isDraggingPopup) {
+            e.preventDefault();
+            
+            // Use requestAnimationFrame for smoother movement
+            if (touchDragAnimationId) {
+              cancelAnimationFrame(touchDragAnimationId);
+            }
+            
+            touchDragAnimationId = requestAnimationFrame(() => {
+              const touch = e.touches[0];
+              const deltaX = touch.clientX - startX;
+              const deltaY = touch.clientY - startY;
+              
+              const newX = initialTranslateX + deltaX;
+              const newY = initialTranslateY + deltaY;
+              
+              // Update popup position with hardware acceleration
+              popup.style.left = '50%';
+              popup.style.top = '50%';
+              popup.style.transform = `translate3d(calc(-50% + ${newX}px), calc(-50% + ${newY}px), 0)`;
+            });
+          }
+        }, { passive: false });
 
-      document.addEventListener('touchend', () => {
-        if (isTouchDragging) {
-          isTouchDragging = false;
-        }
-      });
-
-      document.addEventListener('touchcancel', () => {
-        if (isTouchDragging) {
-          isTouchDragging = false;
-        }
-      });
+        document.addEventListener('touchend', () => {
+          if (isDraggingPopup) {
+            // Cancel any pending animation frame
+            if (touchDragAnimationId) {
+              cancelAnimationFrame(touchDragAnimationId);
+              touchDragAnimationId = null;
+            }
+            
+            // Re-enable transitions after dragging ends
+            popup.classList.remove('dragging');
+          }
+          isDraggingPopup = false;
+        });
+        
+        popup.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 2 && (e.target.closest('#leakChart') || e.target.closest('#networkCanvas'))) {
+            e.preventDefault();
+            isPinching = true;
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            initialDistance = Math.hypot(
+              touch2.clientX - touch1.clientX,
+              touch2.clientY - touch1.clientY
+            );
+            
+            const element = e.target.closest('canvas');
+            if (element) {
+              const currentScale = element.style.transform?.match(/scale\(([^)]+)\)/)?.[1] || 1;
+              initialScale = parseFloat(currentScale);
+            }
+          }
+        }, { passive: false });
+        
+        popup.addEventListener('touchmove', (e) => {
+          if (isPinching && e.touches.length === 2) {
+            e.preventDefault();
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentDistance = Math.hypot(
+              touch2.clientX - touch1.clientX,
+              touch2.clientY - touch1.clientY
+            );
+            
+            const scale = (currentDistance / initialDistance) * initialScale;
+            const clampedScale = Math.max(0.5, Math.min(3, scale));
+            
+            const element = e.target.closest('canvas');
+            if (element) {
+              element.style.transform = `scale(${clampedScale})`;
+            }
+          }
+        }, { passive: false });
+        
+        popup.addEventListener('touchend', () => {
+          isPinching = false;
+        });
+      }
 
       // ESC key support for closing popups and sidebar
       document.addEventListener('keydown', (e) => {
@@ -2622,7 +3123,10 @@
             if (leakNumber && leakNumber <= 6) {
               showLeakData(leakNumber);
             } else if (leakNumber === 7) {
-              LeakDetection();
+              // Ensure detection toggle state is properly set before calling LeakDetection
+              toggleStates.detection = false; // Reset first to ensure proper toggle
+              updateButtonStates(); // Update UI to reflect the state
+              LeakDetection(); // This will now properly set detection to true
             }
           }
         }
@@ -2658,36 +3162,41 @@
     }
 
     // Toggle guide system
-    function toggleGuide() {
+    async function toggleGuide() {
       if (toggleStates.guide) {
         closePopup();
         toggleStates.guide = false;
+        updateButtonStates();
         return;
       }
+      
+      // Ensure clean state before proceeding
+      await ensureCleanState();
       
       // Reset other toggles
       Object.keys(toggleStates).forEach(key => toggleStates[key] = false);
       toggleStates.guide = true;
+      updateButtonStates();
       
       showGuide();
     }
 
-    // Toggle training dataset functionality
+    // 훈련 데이터셋 기능 토글
     function toggleTrainingDataset() {
       const button = document.getElementById('training-dataset-button');
       const container = document.getElementById('training-leak-buttons');
       const arrow = button.querySelector('.expand-arrow');
       
       if (container.classList.contains('hidden')) {
-        // Show training leak buttons
+        // 훈련 누출 버튼들 표시
         container.classList.remove('hidden');
         button.classList.add('expanded');
-        arrow.textContent = '▼'; // ▼ for expanded state
+        arrow.textContent = '▲'; // ▲ for expanded state
       } else {
-        // Hide training leak buttons
+        // 훈련 누출 버튼들 숨기기
         container.classList.add('hidden');
         button.classList.remove('expanded');
-        arrow.textContent = '▲'; // ▲ for collapsed state
+        arrow.textContent = '▼'; // ▼ for collapsed state
       }
     }
 
@@ -2734,13 +3243,16 @@
       
       const popup = document.getElementById('popup');
       
+      // Clear any dragging transforms that might interfere with mobile positioning
+      popup.style.transform = '';
+      
       // Enhanced acrylic transparency for mobile to show background
       popup.style.background = 'rgba(248, 249, 250, 0.85)';
       popup.style.backdropFilter = 'blur(20px) saturate(180%)';
       popup.style.webkitBackdropFilter = 'blur(20px) saturate(180%)';
       
       // Remove any existing popup type classes
-      popup.classList.remove('guide-popup', 'sensor-popup');
+      popup.classList.remove('guide-popup', 'sensor-popup', 'learning-popup');
       
       // Apply different styles based on popup type
       if (popupType === 'guide') {
@@ -2762,6 +3274,26 @@
         if (window.innerWidth <= 480) {
           popup.style.width = '95vw';
           popup.style.height = '70vh';
+        }
+        
+      } else if (popupType === 'learning') {
+        // AI Learning popup - centered with 1/2 screen height
+        popup.classList.add('learning-popup');
+        
+        popup.style.width = '90vw';
+        popup.style.maxWidth = '90vw';
+        popup.style.height = '50vh'; // 1/2 of screen height as requested
+        popup.style.maxHeight = '50vh';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.bottom = 'auto';
+        popup.style.right = 'auto';
+        
+        // For very small screens
+        if (window.innerWidth <= 480) {
+          popup.style.width = '95vw';
+          popup.style.height = '45vh';
         }
         
       } else if (popupType === 'sensor') {
@@ -3057,7 +3589,8 @@
         popup.style.right = 'auto';
         popup.style.top = '50%';
         popup.style.left = '50%';
-        popup.style.transform = 'translate(-50%, -50%)';
+        // Preserve any existing drag position
+        preservePopupPosition();
       }
       
       // Show popup with animation
